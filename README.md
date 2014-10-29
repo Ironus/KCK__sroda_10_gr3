@@ -12,3 +12,10 @@ a)rysowanie trasy<br />
 b)znajdywanie trasy<br />
 2.Grafika i j.polski<br />
 3.Dokumentacja<br />
+
+
+////////////////////////////////////
+
+29.10.14r.<br />
+<br />
+Uporządkowanie klas i podklas dla większej przejrzystości<br />
