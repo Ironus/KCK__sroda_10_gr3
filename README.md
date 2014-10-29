@@ -19,3 +19,4 @@ b)znajdywanie trasy<br />
 29.10.14r.<br />
 <br />
 Uporządkowanie klas i podklas dla większej przejrzystości<br />
+Ustaliliśmy podział obowiązków na nadchodzący tydzień  <br />
