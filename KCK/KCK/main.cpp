@@ -105,7 +105,7 @@ int main() {
       al_show_native_message_box(NULL, NULL, "Graphic error", "Kod b³êdu: " + error_code, NULL, NULL);
       return error_code;
    }
-   al_rest(5.0);
+   al_rest(60.0);
    graphic_destroy();
    return 0;
 }

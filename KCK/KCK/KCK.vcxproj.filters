@@ -21,9 +21,21 @@
     <ClCompile Include="map_objects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="agent_1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="straight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="map_objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="agent_1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="straight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

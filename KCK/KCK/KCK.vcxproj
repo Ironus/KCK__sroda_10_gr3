@@ -65,11 +65,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="agent_1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map_objects.cpp" />
+    <ClCompile Include="straight.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="agent_1.h" />
     <ClInclude Include="map_objects.h" />
+    <ClInclude Include="straight.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
