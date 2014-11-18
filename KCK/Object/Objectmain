@@ -1,0 +1,354 @@
+#include <iostream>
+#include <
+using namespace std;
+
+
+class item{};
+
+class Trasa: public item{
+    public:
+    string image;
+    bool Lewo, Prawo, Gora, Dol;
+    Trasa(bool l, bool p, bool g, bool d){
+        Lewo = l;
+        Prawo = p;
+        Gora = g;
+        Dol = d;
+        }
+};
+
+class Landmark: public item{
+    public:
+    string image, Nazwa, Atrybut;
+    Landmark(string I, string N, string A){
+        image = I;
+        Nazwa = N;
+        Atrybut = A;
+        }
+};
+/*
+                                            z1   / \    z2            Rodzaje zakrêtów
+                                                /   \
+
+
+                                                \   /
+                                             z3  \ /    z4
+
+
+
+                                                || d1
+                                                __ d2
+
+*/
+
+
+class d1: public Trasa
+{
+    string image;
+    string ToString; // Opis dla agenta 2
+
+    d1(){
+    Trasa(false,false,true,true);
+    }
+
+};
+
+class d2: public Trasa
+{
+    string image;
+    string ToString; // Opis dla agenta 2
+
+    d2(){
+    Trasa(true,true,false,false);
+    }
+
+};
+class z1: public Trasa
+{
+    string image;
+    string ToString; // Opis dla agenta 2
+
+    z1(){
+    Trasa(true,false,true,false);
+    }
+
+};
+
+class z2: public Trasa
+{
+    string image;
+    string ToString;
+    z2(){
+    Trasa(false,true,true,false);
+    }
+
+};
+
+class z3: public Trasa
+{
+    string image;
+    string ToString;
+    z3(){
+    Trasa(true,false,false,true);
+    }
+};
+
+class z4: public Trasa
+{
+    string image;
+    string ToString;
+
+    z4(){
+    Trasa(false,true,false,true);
+    }
+};
+
+
+
+class cross: public Trasa
+{
+    string image;
+    string ToString;
+
+    Trasa(true,true,true,true);
+};
+
+
+class start: public Trasa
+{
+    string image;
+    string ToString;
+
+    Trasa(false,false,false,false);
+};
+
+
+
+/*
+class lukL : public Trasa
+{
+	string image;
+    string ToString;
+
+
+
+};
+
+class lukP : public Trasa
+{
+	string image;
+    string ToString;
+
+
+
+};
+class lukG : public Trasa
+{
+	string image;
+    string ToString;
+
+
+
+};
+class lukD : public Trasa
+{
+	string image;
+    string ToString;
+
+
+
+};
+
+*/
+
+
+
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+
+int main(int argc, char** argv) {
+
+    z1 a;
+    z2 b;
+    z3 c;
+    z4 d;
+    cross e;
+    d1 f;
+    d2 g;
+
+    int x=20, y=21;    // aktualny pkt
+    int z=20, c=20;          // zmienne przechowujące miejsce poprzedniego elementu     default środek
+    item siatka[41][41]={0};
+    srand (time(NULL));
+    siatka[z][c]= new start;
+
+    /*
+
+    1 - z1
+    2 - z2
+    3 - z3
+    4 - z4
+    5 - cross
+    6 - d1
+    7 - d2
+    
+    
+    KIERUNKI: 1 - prawo, 2 - góra, 3 - lewo, 4 - dół;    Jak na ćwiartkach w matmie.
+    
+    */
+
+
+
+
+    for (int i=0;i<9;i++){
+
+        losowanie:
+		int element = rand() % 5 + 1;      //losowanie elementu
+        int kierunek = rand() % 4 + 1;      //losowanie kierunku
+
+
+
+        //   Zakręt pierwszy
+        if(element==1){
+            if( kierunek == 2 || kierunek == 3){
+                goto losowanie;
+            }
+            else{
+                if( kierunek == 1){
+                    z=x;
+                    c=y;
+                    siatka[++x][y] = new z1;
+                    }
+                else if( kierunek == 4 )   {
+                    z=x;
+                    c=y;
+                    siatka[x][++y] = new z1;
+
+                }
+            }
+
+            goto losowanie;
+
+        }
+
+
+        //Zakręt drugi
+                if(element==2){
+            if( kierunek == 1 || kierunek == 2){
+                goto losowanie;
+            }
+            else{
+                if( kierunek == 3){
+                    z=x;
+                    c=y;
+                    siatka[--x][y] = new z2;
+                    }
+                else if( kierunek == 4 )   {
+                    z=x;
+                    c=y;
+                    siatka[x][++y] = new z2;
+
+                }
+            }
+
+            goto losowanie;
+
+        }
+
+        //zakret trzeci
+
+
+        if(element==3){
+            if( kierunek == 3 || kierunek == 4){
+                goto losowanie;
+            }
+            else{
+                if( kierunek == 1 ){
+                    z=x;
+                    c=y;
+                    siatka[++x][y] = new z3;
+                    }
+                else if( kierunek == 2 )   {
+                    z=x;
+                    c=y;
+                    siatka[x][--y] = new z3;
+
+                }
+            }
+
+            goto losowanie;
+
+        }
+
+        //Zakret czwarty
+        if(element==4){
+            if( kierunek == 1 || kierunek == 4){
+                goto losowanie;
+            }
+            else{
+                if( kierunek == 2 ){
+                    z=x;
+                    c=y;
+                    siatka[x][--y] = new z4;
+                    }
+                else if( kierunek == 3 )   {
+                    z=x;
+                    c=y;
+                    siatka[--x][y] = new z4;
+
+                }
+            }
+
+            goto losowanie;
+
+        }
+        // Droga pionowa
+         if(element==6){
+            if( kierunek == 1 || kierunek == 3){
+                goto losowanie;
+            }
+            else{
+                if( kierunek == 2 ){
+                    z=x;
+                    c=y;
+                    siatka[x][--y] = new d1;
+                    }
+                else if( kierunek == 4 )   {
+                    z=x;
+                    c=y;
+                    siatka[x][++y] = new d1;
+
+                }
+            }
+
+            goto losowanie;
+
+        }
+
+        // Droga pozioma
+        if(element==7){
+            if( kierunek == 2 || kierunek == 4){
+                goto losowanie;
+            }
+            else{
+                if( kierunek == 1 ){
+                    z=x;
+                    c=y;
+                    siatka[++x][y] = new d1;
+                    }
+                else if( kierunek == 3 )   {
+                    z=x;
+                    c=y;
+                    siatka[--x][y] = new d1;
+
+                }
+            }
+
+            goto losowanie;
+
+        }
+
+
+    }
+
+	return 0;
+}
