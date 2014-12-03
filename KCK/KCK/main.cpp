@@ -1,111 +1,740 @@
-#include <allegro5\allegro.h>
+ï»¿#include <allegro5\allegro.h>
 #include <allegro5\allegro_image.h>
 #include <allegro5\allegro_font.h>
 #include <allegro5\allegro_ttf.h>
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_native_dialog.h>
+#include <iostream>
+#include <string>
 
-/* deklaracja sta³ych zawieraj¹cych szerokoœæ i wysokoœæ okna
-*  width = 2 * 300px - po 300px na agenta + 10 na przerwe miêdzy ich mapami
-*  height = 500px - 300 na wysokoœæ mapki + 200 na log tekstowy z tras¹
-*  z przyzwyczajenia nazwy sta³ych piszê wielkimi literami
-*  a wielocz³onowe nazwy zmiennych oddzielam '_'
+using namespace std;
+
+class item {
+public:
+   string ToString;
+   string dest;
+   ALLEGRO_BITMAP *bitmap;
+   item() {
+      ToString = "1";
+   }
+
+   string getvalue() {
+      return ToString;
+   }
+
+   void nadajString(string _toString) {
+      ToString = _toString;
+   }
+
+   void nadajDest(string _toString) {
+      dest = _toString;
+   }
+
+   ALLEGRO_BITMAP* getBitmap() {
+      return bitmap;
+   }
+};
+
+//////////////////////////////////////////////////////////////////   Funkcje
+
+bool prawo(int _x, int _y, item *tab[15][15]){
+   if (tab[_y][_x + 1] == NULL)
+      return true;
+   else
+      return false;
+
+}
+
+bool lewo(int _x, int _y, item *tab[15][15]){
+   if (tab[_y][_x - 1] == NULL)
+      return true;
+   else
+      return false;
+
+}
+
+bool gora(int _x, int _y, item *tab[15][15]){
+   if (tab[_y - 1][_x] == NULL)
+      return true;
+   else
+      return false;
+
+}
+
+bool dol(int _x, int _y, item *tab[15][15]){
+   if (tab[_y + 1][_x] == NULL)
+      return true;
+   else
+      return false;
+
+}
+
+/////////////////////////////////////////////////////////////////   Podklasy
+
+class Trasa : public item {
+public:
+   string image;
+   bool Lewo, Prawo, Gora, Dol;
+   Trasa(bool l, bool p, bool g, bool d) {
+      Lewo = l;
+      Prawo = p;
+      Gora = g;
+      Dol = d;
+   }
+   void getvalue(){}
+};
+
+class Landmark : public item {
+public:
+   string image, Nazwa, Atrybut;
+   Landmark(string N, string A) {
+      Nazwa = N;
+      Atrybut = A;
+   }
+};
+
+class d1 : public Trasa {
+public:
+   d1(bool _lewo = false, bool _prawo = false, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "D1";
+      bitmap = al_load_bitmap("images/road2.png");
+   }
+};
+
+class d2 : public Trasa {
+public:
+   d2(bool _lewo = false, bool _prawo = false, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "D2";
+      bitmap = al_load_bitmap("images/road.png");
+   }
+};
+class z1 : public Trasa {
+public:
+   z1(bool _lewo = true, bool _prawo = false, bool _gora = true, bool _dol = false) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z1";
+      bitmap = al_load_bitmap("images/left_to_up_turn.png");
+   }
+};
+
+class z2 : public Trasa {
+public:
+   z2(bool _lewo = false, bool _prawo = true, bool _gora = true, bool _dol = false) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z2";
+      bitmap = al_load_bitmap("images/left_turn.png");
+   }
+};
+
+class z3 : public Trasa {
+public:
+   z3(bool _lewo = true, bool _prawo = false, bool _gora = false, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z3";
+      bitmap = al_load_bitmap("images/right_to_up_turn.png");
+   }
+};
+
+class z4 : public Trasa {
+public:
+   z4(bool _lewo = false, bool _prawo = true, bool _gora = false, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z4";
+      bitmap = al_load_bitmap("images/right_turn.png");
+   }
+
+};
+class cross : public Trasa {
+public:
+   cross(bool _lewo = true, bool _prawo = true, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "cr";
+      bitmap = al_load_bitmap("images/junction.png");
+   }
+};
+
+class start : public Trasa {
+public:
+   start(bool _lewo = true, bool _prawo = true, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "St";
+      bitmap = al_load_bitmap("images/start.png");
+   }
+};
+
+class stop : public Trasa {
+public:
+   stop(bool _lewo = true, bool _prawo = true, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "Sp";
+      bitmap = al_load_bitmap("images/stop.png");
+   }
+};
+
+class dDrzewo : public Landmark {
+public:
+   dDrzewo(string __tostr = "L1", string __toatr = "DuÅ¼e") : Landmark(__tostr, __toatr){
+      ToString = "L1";
+      bitmap = al_load_bitmap("images/tree2.png");
+   };
+};
+
+class mDrzewo : public Landmark {
+public:
+   mDrzewo(string __tostr = "L2", string __toatr = "MaÅ‚e") : Landmark(__tostr, __toatr){
+      ToString = "L2";
+      bitmap = al_load_bitmap("images/tree.png");
+   };
+};
+
+class Kamien : public Landmark {
+public:
+   Kamien(string __tostr = "L3", string __toatr = "Twardy") : Landmark(__tostr, __toatr){
+      ToString = "L3";
+      bitmap = al_load_bitmap("images/stone.png");
+   };
+};
+
+class Krzak : public Landmark {
+public:
+   Krzak(string __tostr = "L5", string __toatr = "Zielony") : Landmark(__tostr, __toatr){
+      ToString = "L5";
+      bitmap = al_load_bitmap("images/bush.png");
+   };
+};
+
+class Dom : public Landmark {
+public:
+   Dom(string __tostr = "L1", string __toatr = "Rodzinny") : Landmark(__tostr, __toatr){
+      ToString = "L4";
+      bitmap = al_load_bitmap("images/house.png");
+   };
+};
+
+/* deklaracja staÅ‚ych zawierajÄ…cych szerokoÅ›Ä‡ i wysokoÅ›Ä‡ okna
+*  width = 2 * 300px - po 300px na agenta + 10 na przerwe miÄ™dzy ich mapami
+*  height = 500px - 300 na wysokoÅ›Ä‡ mapki + 200 na log tekstowy z trasÄ…
+*  z przyzwyczajenia nazwy staÅ‚ych piszÄ™ wielkimi literami
+*  a wieloczÅ‚onowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 610, SCREEN_H = 500, MAP_SIDE = 300;
+const short SCREEN_W = 450, SCREEN_H = 600, MAP_SIDE = 450;
 
-/* deklaracja zmiennej przetrzymuj¹cej kod b³êdu
-*  <>0 - b³¹d
-*  ==0 - brak b³êdu
+/* deklaracja zmiennej przetrzymujÄ…cej kod bÅ‚Ä™du
+*  <>0 - bÅ‚Ä…d
+*  ==0 - brak bÅ‚Ä™du
 */
 int error_code = 0;
 
-// deklaracje zmiennych/wskaŸników allegro
-ALLEGRO_DISPLAY *display = NULL;          // wskaŸnik g³ównego okna
-ALLEGRO_FONT *font = NULL;                // wskaŸnik na czcionkê
+// deklaracje zmiennych/wskaÅºnikÃ³w allegro
+ALLEGRO_DISPLAY *display = NULL;          // wskaÅºnik gÅ‚Ã³wnego okna
+ALLEGRO_FONT *font = NULL;                // wskaÅºnik na czcionkÄ™
+ALLEGRO_EVENT_QUEUE *event_queue = NULL;  // wskaÅºnik na kolejkÄ™ zdarzeÅ„
 
 int graphic_initialize() {
-   /* zainicjowanie biblioteki allegro poprzez sprawdzenie zwróconej wartoœci z al_init()
-   *  jeœli if zwróci 1 - b³¹d inicjalizacji, przerwanie dzia³ania programu
-   *  jeœli zwróci 0 - zainicjowano allegro, program wykona siê dalej
+   /* zainicjowanie biblioteki allegro poprzez sprawdzenie zwrÃ³conej wartoÅ›ci z al_init()
+   *  jeÅ›li if zwrÃ³ci 1 - bÅ‚Ä…d inicjalizacji, przerwanie dziaÅ‚ania programu
+   *  jeÅ›li zwrÃ³ci 0 - zainicjowano allegro, program wykona siÄ™ dalej
    */
    if (!al_init()) {
-      // wyœwietlenie okna dialogowego z komunikatem b³êdu
-      al_show_native_message_box(NULL, NULL, "ERROR al_init()", "B³¹d inicjalizacji allegro.", NULL, NULL);
+      // wyÅ›wietlenie okna dialogowego z komunikatem bÅ‚Ä™du
+      al_show_native_message_box(NULL, NULL, "ERROR al_init()", "BÅ‚Ä…d inicjalizacji allegro.", NULL, NULL);
       return -1;
    }
-   // nadanie wymiarów g³ownemu okienku
+   // nadanie wymiarÃ³w gÅ‚ownemu okienku
    display = al_create_display(SCREEN_W, SCREEN_H);
    // sprawdzenie utworzenia okienka
    if (!display) {
-      al_show_native_message_box(NULL, NULL, "ERROR display", "B³¹d tworzenia okna display.", NULL, NULL);
+      al_show_native_message_box(NULL, NULL, "ERROR display", "BÅ‚Ä…d tworzenia okna display.", NULL, NULL);
       return -2;
    }
    // inicjalizacja wtyczek
    al_init_image_addon();        // obrazy
    al_init_font_addon();         // czcionka
    al_init_ttf_addon();          // czcionka truetype
-   al_init_primitives_addon();   // kszta³ty predefiniowane
-   // za³adowanie czcionki
+   al_init_primitives_addon();   // ksztaÅ‚ty predefiniowane
+   al_install_keyboard();
+
+   //inicjalizacja kolejki
+   event_queue = al_create_event_queue();
+   al_register_event_source(event_queue, al_get_keyboard_event_source());
+   // zaÅ‚adowanie czcionki
    font = al_load_font("fonts/arial.ttf", 16, 0);
-   // sprawdzenie czy za³adowana poprawnie
+   // sprawdzenie czy zaÅ‚adowana poprawnie
    if (!font) {
-      al_show_native_message_box(NULL, NULL, "Font error", "b³¹d czcionki", NULL, NULL);
+      al_show_native_message_box(NULL, NULL, "Font error", "bÅ‚Ä…d czcionki", NULL, NULL);
       return 1;
    }
-   // zwrócenie braku b³êdu
+   // zwrÃ³cenie braku bÅ‚Ä™du
    return 0;
 }
-/* funkcje *_destroy i draw w allegro nie zwracaj¹ wartoœci 
-*  wiêc funkcje tworzê jako boole zwracaj¹ce 0 po wykonaniu
+/* funkcje *_destroy i draw w allegro nie zwracajÄ… wartoÅ›ci
+*  wiÄ™c funkcje tworzÄ™ jako boole zwracajÄ…ce 0 po wykonaniu
 */
 bool graphic_destroy() {
-   // zniszczenie g³ównego okna
+   // zniszczenie gÅ‚Ã³wnego okna
    al_destroy_display(display);
    // zniszczenie czcionki
    al_destroy_font(font);
-   // zwolnienie wskaŸników
+   // zniszczenie kolejki
+   al_destroy_event_queue(event_queue);
+   // zwolnienie wskaÅºnikÃ³w
    display = NULL;
    font = NULL;
+   event_queue = NULL;
    return 0;
 }
-//funkcja rysuj¹ca menu
-bool draw_menu() {
-   // czyszczenie t³a do koloru magenty(255,0,255) :3
+
+int main() {
+   //wywoÅ‚anie inicjalizacji silnika graficznego
+   graphic_initialize();
+   // czyszczenie tÅ‚a do koloru magenty(255,0,255) :3
    al_clear_to_color(al_map_rgb(255, 0, 255));
-   // rysowanie linii oddzielaj¹cej mapki od siebie
+   // rysowanie linii oddzielajÄ…cej mapki od siebie
    al_draw_line(MAP_SIDE, 0, MAP_SIDE, MAP_SIDE, al_map_rgb(128, 128, 128), 10);
-   // rysowanie linii oddzielaj¹cej mapki od logów
+   // rysowanie linii oddzielajÄ…cej mapki od logÃ³w
    al_draw_line(0, MAP_SIDE + 2, SCREEN_W, MAP_SIDE + 2, al_map_rgb(128, 128, 128), 4);
-   // rysowanie bia³ego t³a pod loga
+   // rysowanie biaÅ‚ego tÅ‚a pod loga
    al_draw_filled_rectangle(0, MAP_SIDE + 4, SCREEN_W, SCREEN_H, al_map_rgb(255, 255, 255));
    // rysowanie tekstu
    al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 10, 0, "1. Log agenta");
    al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 25, 0, "2. Log agenta");
    al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 40, 0, "3. Log agenta");
    al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 55, 0, "4. Log agenta");
-   // zmiana buffera (wyœwietlanego ekranu)
-   al_flip_display();
-   //zwrócenie braku b³êdu
-   return 0;
-}
 
-int main() {
-   //wywo³anie inicjalizacji silnika graficznego
-   error_code = graphic_initialize();
-   if (error_code != 0) {
-      // wyœwietlenie okna dialogowego z komunikatem b³êdu
-      al_show_native_message_box(NULL, NULL, "Graphic error", "Kod b³êdu: " + error_code, NULL, NULL);
-      return error_code;
+   z1 a;
+   z2 b;
+   z3 c;
+   z4 d;
+   cross e;
+   d1 f;
+   d2 g;
+   start startl;
+   stop stop1;
+
+
+   int y = 8, x = 8, i = 0;          // zmienne przechowujace miejsce poprzedniego elementu     default srodek
+   item* siatka[15][15];
+
+
+
+   for (int l = 0; l < 15; l++){
+      for (int m = 0; m < 15; m++) {
+         siatka[l][m] = NULL;
+      }
    }
-   // wywo³anie funkcji rysuj¹cej menu
-   error_code = draw_menu();
-   if (error_code != 0) {
-      // wyœwietlenie okna dialogowego z komunikatem b³êdu
-      al_show_native_message_box(NULL, NULL, "Graphic error", "Kod b³êdu: " + error_code, NULL, NULL);
-      return error_code;
+
+   srand(time(NULL));
+
+   siatka[y][x] = new start();
+   siatka[y][x]->nadajDest("2");
+
+losowanie:
+   //int element = rand() % 5 + 1;      //losowanie elementu
+   int kierunek = rand() % 4 + 1;      //losowanie kierunku
+
+
+   if (kierunek == 1 && prawo(x, y, siatka) == true){
+   kier1:
+      if (i >= 15) goto live;
+      else{
+         x++;
+         int tempsum = 0;
+         if (prawo(x, y, siatka) == true) tempsum = tempsum + 1;
+         if (gora(x, y, siatka) == true) tempsum = tempsum + 2;
+         if (dol(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+         if (tempsum == 1) {
+            siatka[y][x] = new d2();
+            siatka[y][x]->nadajDest("1");
+            i++;
+            goto kier1;
+         }
+         if (tempsum == 2) {
+            siatka[y][x] = new z1();
+            siatka[y][x]->nadajDest("2"); i++;
+            goto kier2;
+         }
+         if (tempsum == 3) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d2();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+         }
+         if (tempsum == 4) {
+            siatka[y][x] = new z3();
+            siatka[y][x]->nadajDest("4"); i++;
+            goto kier4;
+         }
+         if (tempsum == 5) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d2();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier4;
+            }
+         }
+         if (tempsum == 6) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier4;
+            }
+         }
+         if (tempsum == 7) {
+            int temprand = rand() % 3 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier4;
+            }
+            if (temprand == 3) {
+               siatka[y][x] = new d2();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+
+         }
+
+      }
    }
-   al_rest(60.0);
+
+
+
+
+   if (kierunek == 2 && gora(x, y, siatka) == true){
+   kier2:
+      if (i >= 15) goto live;
+      else{
+         y--;
+         int tempsum = 0;
+         if (prawo(x, y, siatka) == true) tempsum = tempsum + 1;
+         if (gora(x, y, siatka) == true) tempsum = tempsum + 2;
+         if (lewo(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+         if (tempsum == 1) {
+            siatka[y][x] = new z4();
+            siatka[y][x]->nadajDest("1"); i++;
+            goto kier1;
+         }
+         if (tempsum == 2) {
+            siatka[y][x] = new d1();
+            siatka[y][x]->nadajDest("2"); i++;
+            goto kier2;
+         }
+         if (tempsum == 3) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+         }
+         if (tempsum == 4) {
+            siatka[y][x] = new z3();
+            siatka[y][x]->nadajDest("3"); i++;
+            goto kier3;
+         }
+         if (tempsum == 5) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+         if (tempsum == 6) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+         if (tempsum == 7) {
+            int temprand = rand() % 3 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+            if (temprand == 3) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+      }
+   }
+
+
+   if (kierunek == 3 && lewo(x, y, siatka) == true){
+   kier3:
+      if (i >= 15) goto live;
+      else{
+         x--;
+         int tempsum = 0;
+         if (dol(x, y, siatka) == true) tempsum = tempsum + 1;
+         if (gora(x, y, siatka) == true) tempsum = tempsum + 2;
+         if (lewo(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+         if (tempsum == 1) {
+            siatka[y][x] = new z4();
+            siatka[y][x]->nadajDest("4"); i++;
+            goto kier4;
+         }
+         if (tempsum == 2) {
+            siatka[y][x] = new z2();
+            siatka[y][x]->nadajDest("2"); i++;
+            goto kier2;
+         }
+         if (tempsum == 3) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+         }
+         if (tempsum == 4) {
+            siatka[y][x] = new d2();
+            siatka[y][x]->nadajDest("3"); i++;
+            goto kier3;
+         }
+         if (tempsum == 5) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new d2();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+         if (tempsum == 6) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d2();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+         }
+         if (tempsum == 7) {
+            int temprand = rand() % 3 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("2"); i++;
+               goto kier2;
+            }
+            if (temprand == 3) {
+               siatka[y][x] = new d2();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+      }
+   }
+
+
+   if (kierunek == 4 && dol(x, y, siatka) == true){
+   kier4:
+      if (i >= 15) goto live;
+      else{
+         y++;
+         int tempsum = 0;
+         if (dol(x, y, siatka) == true) tempsum = tempsum + 1;
+         if (prawo(x, y, siatka) == true) tempsum = tempsum + 2;
+         if (lewo(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+         if (tempsum == 1) {
+            siatka[y][x] = new d1();
+            siatka[y][x]->nadajDest("4"); i++;
+            goto kier4;
+         }
+         if (tempsum == 2) {
+            siatka[y][x] = new z2();
+            siatka[y][x]->nadajDest("1"); i++;
+            goto kier1;
+         }
+         if (tempsum == 3) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier4;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+         }
+         if (tempsum == 4) {
+            siatka[y][x] = new z1();
+            siatka[y][x]->nadajDest("3"); i++;
+            goto kier3;
+         }
+         if (tempsum == 5) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier4;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+         if (tempsum == 6) {
+            int temprand = rand() % 2 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+         }
+         if (tempsum == 7) {
+            int temprand = rand() % 3 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("4"); i++;
+               goto kier4;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("1"); i++;
+               goto kier1;
+            }
+            if (temprand == 3) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("3"); i++;
+               goto kier3;
+            }
+         }
+      }
+   }
+   else
+      goto losowanie;
+
+   if (prawo(x, y, siatka) == false && lewo(x, y, siatka) == false && gora(x, y, siatka) == false && dol(x, y, siatka) == false){
+      siatka[y][x] = new stop();
+      i = 10;
+   }
+live:
+   int j = 0;
+   while (j != 20){
+      int __x = rand() % 15;
+      int __y = rand() % 15;
+      if (siatka[__y][__x] == NULL){
+         int _los = rand() % 5;
+         if (_los == 0) siatka[__y][__x] = new dDrzewo();
+         if (_los == 1) siatka[__y][__x] = new mDrzewo();
+         if (_los == 2) siatka[__y][__x] = new Kamien();
+         if (_los == 3) siatka[__y][__x] = new Dom();
+         if (_los == 4) siatka[__y][__x] = new Krzak();
+         j++;
+      }
+   }
+   bool done = false;
+   ALLEGRO_BITMAP * grassBitmap = NULL;
+   grassBitmap = al_load_bitmap("images/grass.png");
+   while (!done) {
+      ALLEGRO_EVENT ev;
+      for (int l = 0; l < 15; l++) {
+         for (int m = 0; m < 15; m++) {
+            if (siatka[l][m] != NULL)
+               al_draw_bitmap(siatka[l][m]->getBitmap(), l * 30, m * 30, NULL);
+            else
+               al_draw_bitmap(grassBitmap, l * 30, m * 30, NULL);
+         }
+      }
+      for (int l = 0; l < 15; l++){
+         for (int m = 0; m < 15; m++) {
+            if (siatka[m][l] != NULL)
+            {
+               cout << " ";
+               cout << siatka[m][l]->getvalue();
+               cout << " ";
+            }
+
+            else cout << "    ";
+         }
+         cout << endl;
+      }
+      al_flip_display();
+      al_wait_for_event(event_queue, &ev);
+      if (ev.type == ALLEGRO_EVENT_KEY_UP) {
+         switch (ev.keyboard.keycode) {
+         case ALLEGRO_KEY_ESCAPE:
+            done = true;
+         }
+      }
+   }
    graphic_destroy();
    return 0;
 }
