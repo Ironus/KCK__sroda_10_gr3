@@ -211,7 +211,7 @@ public:
 *  a wieloczłonowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 450, SCREEN_H = 600, MAP_SIDE = 450;
+const short SCREEN_W = 450, SCREEN_H = 675, MAP_SIDE = 450;
 
 /* deklaracja zmiennej przetrzymującej kod błędu
 *  <>0 - błąd
@@ -687,6 +687,7 @@ losowanie:
    }
 live:
    int j = 0;
+   siatka[y][x] = new stop();
    while (j != 20){
       int __x = rand() % 15;
       int __y = rand() % 15;
