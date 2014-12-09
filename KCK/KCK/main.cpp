@@ -714,7 +714,7 @@ int main() {
    */
 
 
-vector<string>trasa;
+   vector<string>trasa;
 
 losowanie:
    //int element = rand() % 5 + 1;      //losowanie elementu
@@ -742,8 +742,8 @@ losowanie:
          if (tempsum == 2) {
             siatka[y][x] = new z1();
             siatka[y][x]->nadajDest("2"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 1 \n";
+            trasa.push_back("luk 1");
             goto kier2;
          }
          if (tempsum == 3) {
@@ -758,16 +758,16 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 1 \n";
+               trasa.push_back("luk 1");
                goto kier2;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new z3();
             siatka[y][x]->nadajDest("4"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 3 \n";
+            trasa.push_back("luk 3");
             goto kier4;
          }
          if (tempsum == 5) {
@@ -782,8 +782,8 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 3 \n";
+               trasa.push_back("luk 3");
                goto kier4;
             }
          }
@@ -792,15 +792,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 1 \n";
+               trasa.push_back("luk 1");
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
                opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               trasa.push_back("luk 3");
                goto kier4;
             }
          }
@@ -809,15 +809,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 1 \n";
+               trasa.push_back("luk 1");
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 3 \n";
+               trasa.push_back("luk 3");
                goto kier4;
             }
             if (temprand == 3) {
@@ -850,8 +850,8 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new z4();
             siatka[y][x]->nadajDest("1"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 4 \n";
+            trasa.push_back("luk 4");
             goto kier1;
          }
          if (tempsum == 2) {
@@ -873,16 +873,16 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 4 \n";
+               trasa.push_back("luk 4");
                goto kier1;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new z3();
             siatka[y][x]->nadajDest("3"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 3 \n";
+            trasa.push_back("luk 3");
             goto kier3;
          }
          if (tempsum == 5) {
@@ -890,15 +890,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 4 \n";
+               trasa.push_back("luk 4");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 3 \n";
+               trasa.push_back("luk 3");
                goto kier3;
             }
          }
@@ -914,8 +914,8 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 3 \n";
+               trasa.push_back("luk 3");
                goto kier3;
             }
          }
@@ -924,8 +924,8 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 4 \n";
+               trasa.push_back("luk 4");
                goto kier1;
             }
             if (temprand == 2) {
@@ -938,8 +938,8 @@ losowanie:
             if (temprand == 3) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 3 \n";
+               trasa.push_back("luk 3");
                goto kier3;
             }
          }
@@ -961,15 +961,15 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new z4();
             siatka[y][x]->nadajDest("4"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 4 \n";
+            trasa.push_back("luk 4");
             goto kier4;
          }
          if (tempsum == 2) {
             siatka[y][x] = new z2();
             siatka[y][x]->nadajDest("2"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 2 \n";
+            trasa.push_back("luk 2");
             goto kier2;
          }
          if (tempsum == 3) {
@@ -977,15 +977,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 4 \n";
+               trasa.push_back("luk 4");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier2;
             }
          }
@@ -1001,8 +1001,8 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 4\n";
+               trasa.push_back("luk 4");
                goto kier1;
             }
             if (temprand == 2) {
@@ -1025,8 +1025,8 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier2;
             }
          }
@@ -1035,15 +1035,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 4\n";
+               trasa.push_back("luk 4");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier2;
             }
             if (temprand == 3) {
@@ -1078,8 +1078,8 @@ losowanie:
          if (tempsum == 2) {
             siatka[y][x] = new z2();
             siatka[y][x]->nadajDest("1"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 2\n";
+            trasa.push_back("luk 2");
             goto kier1;
          }
          if (tempsum == 3) {
@@ -1094,16 +1094,16 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier1;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new z1();
             siatka[y][x]->nadajDest("3"); i++;
-            opisTrasy += "luk \n";
-            trasa.push_back("luk");
+            opisTrasy += "luk 1 \n";
+            trasa.push_back("luk 1");
             goto kier3;
          }
          if (tempsum == 5) {
@@ -1118,8 +1118,8 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 1 \n";
+               trasa.push_back("luk 1");
                goto kier3;
             }
          }
@@ -1128,15 +1128,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 1 \n";
+               trasa.push_back("luk 1");
                goto kier3;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier1;
             }
          }
@@ -1152,15 +1152,15 @@ losowanie:
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier1;
             }
             if (temprand == 3) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += "luk \n";
-               trasa.push_back("luk");
+               opisTrasy += "luk 2 \n";
+               trasa.push_back("luk 2");
                goto kier3;
             }
          }
