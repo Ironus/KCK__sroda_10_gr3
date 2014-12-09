@@ -4,8 +4,10 @@
 #include <allegro5\allegro_ttf.h>
 #include <allegro5\allegro_primitives.h>
 #include <allegro5\allegro_native_dialog.h>
+#include <vector>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -69,6 +71,32 @@ bool dol(int _x, int _y, item *tab[15][15]){
 
 }
 
+string makeLine(string tekst, int poczX, int poczY, int konX, int konY){
+   string line;
+   stringstream ss;
+   ss << poczX;
+   string str = ss.str();
+   line = tekst + "(" + str + ",";
+   ss.str(std::string());
+   ss << poczY;
+   str = ss.str();
+   line += str + ")";
+   ss.str(std::string());
+   ss << konX;
+   str = ss.str();
+   line += "(" + str + ",";
+   ss.str(std::string());
+   ss << konY;
+   str = ss.str();
+   line += str + ")";
+   return line;
+}
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////   Podklasy
 
 class Trasa : public item {
@@ -97,7 +125,7 @@ class d1 : public Trasa {
 public:
    d1(bool _lewo = false, bool _prawo = false, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
       ToString = "D1";
-      bitmap = al_load_bitmap("images/road2.png");
+      bitmap = al_load_bitmap("images/road.png");
    }
 };
 
@@ -105,7 +133,7 @@ class d2 : public Trasa {
 public:
    d2(bool _lewo = false, bool _prawo = false, bool _gora = true, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
       ToString = "D2";
-      bitmap = al_load_bitmap("images/road.png");
+      bitmap = al_load_bitmap("images/road2.png");
    }
 };
 class z1 : public Trasa {
@@ -120,7 +148,7 @@ class z2 : public Trasa {
 public:
    z2(bool _lewo = false, bool _prawo = true, bool _gora = true, bool _dol = false) : Trasa(_lewo, _prawo, _gora, _dol){
       ToString = "z2";
-      bitmap = al_load_bitmap("images/left_turn.png");
+      bitmap = al_load_bitmap("images/right_to_up_turn.png");
    }
 };
 
@@ -128,7 +156,7 @@ class z3 : public Trasa {
 public:
    z3(bool _lewo = true, bool _prawo = false, bool _gora = false, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
       ToString = "z3";
-      bitmap = al_load_bitmap("images/right_to_up_turn.png");
+      bitmap = al_load_bitmap("images/left_turn.png");
    }
 };
 
@@ -211,7 +239,7 @@ public:
 *  a wieloczłonowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 450, SCREEN_H = 675, MAP_SIDE = 450;
+const short SCREEN_W = 700, SCREEN_H = 450, MAP_SIDE = 450;
 
 /* deklaracja zmiennej przetrzymującej kod błędu
 *  <>0 - błąd
@@ -283,17 +311,10 @@ int main() {
    graphic_initialize();
    // czyszczenie tła do koloru magenty(255,0,255) :3
    al_clear_to_color(al_map_rgb(255, 0, 255));
-   // rysowanie linii oddzielającej mapki od siebie
+   // rysowanie linii oddzielającej mapke od logow
    al_draw_line(MAP_SIDE, 0, MAP_SIDE, MAP_SIDE, al_map_rgb(128, 128, 128), 10);
-   // rysowanie linii oddzielającej mapki od logów
-   al_draw_line(0, MAP_SIDE + 2, SCREEN_W, MAP_SIDE + 2, al_map_rgb(128, 128, 128), 4);
    // rysowanie białego tła pod loga
-   al_draw_filled_rectangle(0, MAP_SIDE + 4, SCREEN_W, SCREEN_H, al_map_rgb(255, 255, 255));
-   // rysowanie tekstu
-   al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 10, 0, "1. Log agenta");
-   al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 25, 0, "2. Log agenta");
-   al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 40, 0, "3. Log agenta");
-   al_draw_text(font, al_map_rgb(0, 0, 0), 10, MAP_SIDE + 55, 0, "4. Log agenta");
+   al_draw_filled_rectangle(MAP_SIDE + 4, 0, SCREEN_W, SCREEN_H, al_map_rgb(255, 255, 255));
 
    z1 a;
    z2 b;
@@ -309,7 +330,7 @@ int main() {
    int y = 8, x = 8, i = 0;          // zmienne przechowujace miejsce poprzedniego elementu     default srodek
    item* siatka[15][15];
 
-
+   std::string opisTrasy = "";
 
    for (int l = 0; l < 15; l++){
       for (int m = 0; m < 15; m++) {
@@ -322,10 +343,382 @@ int main() {
    siatka[y][x] = new start();
    siatka[y][x]->nadajDest("2");
 
-losowanie:
+
+
+
+   /*
+   losowanie:
    //int element = rand() % 5 + 1;      //losowanie elementu
    int kierunek = rand() % 4 + 1;      //losowanie kierunku
 
+
+   if (kierunek == 1 && prawo(x, y, siatka) == true){
+   kier1:
+   if (i >= 15) goto live;
+   else{
+   x++;
+   int tempsum = 0;
+   if (prawo(x, y, siatka) == true) tempsum = tempsum + 1;
+   if (gora(x, y, siatka) == true) tempsum = tempsum + 2;
+   if (dol(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+   if (tempsum == 1) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("1");
+   i++;
+   goto kier1;
+   }
+   if (tempsum == 2) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (tempsum == 3) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   }
+   if (tempsum == 4) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (tempsum == 5) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   }
+   if (tempsum == 6) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   }
+   if (tempsum == 7) {
+   int temprand = rand() % 3 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (temprand == 3) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+
+   }
+
+   }
+   }
+
+
+
+
+   if (kierunek == 2 && gora(x, y, siatka) == true){
+   kier2:
+   if (i >= 15) goto live;
+   else{
+   y--;
+   int tempsum = 0;
+   if (prawo(x, y, siatka) == true) tempsum = tempsum + 1;
+   if (gora(x, y, siatka) == true) tempsum = tempsum + 2;
+   if (lewo(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+   if (tempsum == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (tempsum == 2) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (tempsum == 3) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   }
+   if (tempsum == 4) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   if (tempsum == 5) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   if (tempsum == 6) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   if (tempsum == 7) {
+   int temprand = rand() % 3 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (temprand == 3) {
+   siatka[y][x] = new z3();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   }
+   }
+
+
+   if (kierunek == 3 && lewo(x, y, siatka) == true){
+   kier3:
+   if (i >= 15) goto live;
+   else{
+   x--;
+   int tempsum = 0;
+   if (dol(x, y, siatka) == true) tempsum = tempsum + 1;
+   if (gora(x, y, siatka) == true) tempsum = tempsum + 2;
+   if (lewo(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+   if (tempsum == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (tempsum == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (tempsum == 3) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   }
+   if (tempsum == 4) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   if (tempsum == 5) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   if (tempsum == 6) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   }
+   if (tempsum == 7) {
+   int temprand = rand() % 3 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z4();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("2"); i++;
+   goto kier2;
+   }
+   if (temprand == 3) {
+   siatka[y][x] = new d2();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   }
+   }
+
+
+   if (kierunek == 4 && dol(x, y, siatka) == true){
+   kier4:
+   if (i >= 15) goto live;
+   else{
+   y++;
+   int tempsum = 0;
+   if (dol(x, y, siatka) == true) tempsum = tempsum + 1;
+   if (prawo(x, y, siatka) == true) tempsum = tempsum + 2;
+   if (lewo(x, y, siatka) == true) tempsum = tempsum + 4;
+
+
+   if (tempsum == 1) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (tempsum == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (tempsum == 3) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   }
+   if (tempsum == 4) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   if (tempsum == 5) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   if (tempsum == 6) {
+   int temprand = rand() % 2 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   }
+   if (tempsum == 7) {
+   int temprand = rand() % 3 + 1;
+   if (temprand == 1) {
+   siatka[y][x] = new d1();
+   siatka[y][x]->nadajDest("4"); i++;
+   goto kier4;
+   }
+   if (temprand == 2) {
+   siatka[y][x] = new z2();
+   siatka[y][x]->nadajDest("1"); i++;
+   goto kier1;
+   }
+   if (temprand == 3) {
+   siatka[y][x] = new z1();
+   siatka[y][x]->nadajDest("3"); i++;
+   goto kier3;
+   }
+   }
+   }
+   }
+   else
+   goto losowanie;
+
+   if (prawo(x, y, siatka) == false && lewo(x, y, siatka) == false && gora(x, y, siatka) == false && dol(x, y, siatka) == false){
+   siatka[y][x] = new stop();
+   i = 10;
+   }
+
+   */
+
+
+vector<string>trasa;
+
+losowanie:
+   //int element = rand() % 5 + 1;      //losowanie elementu
+   int kierunek = rand() % 4 + 1;      //losowanie kierunku
 
    if (kierunek == 1 && prawo(x, y, siatka) == true){
    kier1:
@@ -341,12 +734,16 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new d2();
             siatka[y][x]->nadajDest("1");
+            opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
+            trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
             i++;
             goto kier1;
          }
          if (tempsum == 2) {
             siatka[y][x] = new z1();
             siatka[y][x]->nadajDest("2"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier2;
          }
          if (tempsum == 3) {
@@ -354,17 +751,23 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier2;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new z3();
             siatka[y][x]->nadajDest("4"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier4;
          }
          if (tempsum == 5) {
@@ -372,11 +775,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier4;
             }
          }
@@ -385,11 +792,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier4;
             }
          }
@@ -398,16 +809,22 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier4;
             }
             if (temprand == 3) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
                goto kier1;
             }
 
@@ -433,11 +850,15 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new z4();
             siatka[y][x]->nadajDest("1"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier1;
          }
          if (tempsum == 2) {
             siatka[y][x] = new d1();
             siatka[y][x]->nadajDest("2"); i++;
+            opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
+            trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
             goto kier2;
          }
          if (tempsum == 3) {
@@ -445,17 +866,23 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new z3();
             siatka[y][x]->nadajDest("3"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier3;
          }
          if (tempsum == 5) {
@@ -463,11 +890,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier3;
             }
          }
@@ -476,11 +907,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier3;
             }
          }
@@ -489,16 +924,22 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
                goto kier2;
             }
             if (temprand == 3) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier3;
             }
          }
@@ -520,11 +961,15 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new z4();
             siatka[y][x]->nadajDest("4"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier4;
          }
          if (tempsum == 2) {
             siatka[y][x] = new z2();
             siatka[y][x]->nadajDest("2"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier2;
          }
          if (tempsum == 3) {
@@ -532,17 +977,23 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier2;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new d2();
             siatka[y][x]->nadajDest("3"); i++;
+            opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
+            trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
             goto kier3;
          }
          if (tempsum == 5) {
@@ -550,11 +1001,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
                goto kier3;
             }
          }
@@ -563,11 +1018,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
                goto kier3;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier2;
             }
          }
@@ -576,16 +1035,21 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier2;
             }
             if (temprand == 3) {
                siatka[y][x] = new d2();
-               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
                goto kier3;
             }
          }
@@ -607,11 +1071,15 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new d1();
             siatka[y][x]->nadajDest("4"); i++;
+            opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
+            trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
             goto kier4;
          }
          if (tempsum == 2) {
             siatka[y][x] = new z2();
             siatka[y][x]->nadajDest("1"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier1;
          }
          if (tempsum == 3) {
@@ -619,17 +1087,23 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
                goto kier4;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new z1();
             siatka[y][x]->nadajDest("3"); i++;
+            opisTrasy += "luk \n";
+            trasa.push_back("luk");
             goto kier3;
          }
          if (tempsum == 5) {
@@ -637,11 +1111,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
                goto kier4;
             }
             if (temprand == 2) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier3;
             }
          }
@@ -650,11 +1128,15 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier3;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
          }
@@ -663,16 +1145,22 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
+               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
                goto kier4;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier1;
             }
             if (temprand == 3) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "luk \n";
+               trasa.push_back("luk");
                goto kier3;
             }
          }
@@ -685,9 +1173,13 @@ losowanie:
       siatka[y][x] = new stop();
       i = 10;
    }
+
+
+
+
+
 live:
    int j = 0;
-   siatka[y][x] = new stop();
    while (j != 20){
       int __x = rand() % 15;
       int __y = rand() % 15;
@@ -701,6 +1193,12 @@ live:
          j++;
       }
    }
+
+   cout << opisTrasy;
+
+
+
+
    bool done = false;
    ALLEGRO_BITMAP * grassBitmap = NULL;
    grassBitmap = al_load_bitmap("images/grass.png");
@@ -708,18 +1206,18 @@ live:
       ALLEGRO_EVENT ev;
       for (int l = 0; l < 15; l++) {
          for (int m = 0; m < 15; m++) {
-            if (siatka[l][m] != NULL)
-               al_draw_bitmap(siatka[l][m]->getBitmap(), l * 30, m * 30, NULL);
+            if (siatka[m][l] != NULL)
+               al_draw_bitmap(siatka[m][l]->getBitmap(), l * 30, m * 30, NULL);
             else
                al_draw_bitmap(grassBitmap, l * 30, m * 30, NULL);
          }
       }
       for (int l = 0; l < 15; l++){
          for (int m = 0; m < 15; m++) {
-            if (siatka[m][l] != NULL)
+            if (siatka[l][m] != NULL)
             {
                cout << " ";
-               cout << siatka[m][l]->getvalue();
+               cout << siatka[l][m]->getvalue();
                cout << " ";
             }
 
@@ -727,6 +1225,14 @@ live:
          }
          cout << endl;
       }
+
+      int round = 0;
+      int jump = 15;
+      for (int k = 0; k < trasa.size(); k++) {
+         al_draw_textf(font, al_map_rgb(0, 0, 0), MAP_SIDE + 10, 10 + round * jump, 0, "%s", trasa[k].c_str());
+         round++;
+      }
+
       al_flip_display();
       al_wait_for_event(event_queue, &ev);
       if (ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -737,5 +1243,7 @@ live:
       }
    }
    graphic_destroy();
+
+
    return 0;
 }
