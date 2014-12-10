@@ -115,9 +115,11 @@ public:
 class Landmark : public item {
 public:
    string image, Nazwa, Atrybut;
+   bool seen;
    Landmark(string N, string A) {
       Nazwa = N;
       Atrybut = A;
+      seen = 0;
    }
 };
 
