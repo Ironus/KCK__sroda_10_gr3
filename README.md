@@ -20,3 +20,13 @@ b)znajdywanie trasy<br />
 <br />
 Uporządkowanie klas i podklas dla większej przejrzystości<br />
 Ustaliliśmy podział obowiązków na nadchodzący tydzień  <br />
+
+
+
+
+10.12.14r. <br />
+
+<br />
+Tworzenie oraz implementacja funkcji odpowiedzialnych za opis trasy w języku słownym<br />
+
+Ustaliliśmy podział obowiązków na nadchodzący tydzień  <br />
