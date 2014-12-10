@@ -115,7 +115,7 @@ public:
 class Landmark : public item {
 public:
    string image, Nazwa, Atrybut;
-   bool seen;
+   bool seen; //zmienna zawierajaca informacje czy dany landmark zostal zobaczony wczesniej
    Landmark(string N, string A) {
       Nazwa = N;
       Atrybut = A;
