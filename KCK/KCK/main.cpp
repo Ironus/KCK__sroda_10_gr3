@@ -268,7 +268,7 @@ public:
 *  a wieloczłonowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 710, SCREEN_H = 450, MAP_SIDE = 450;
+const short SCREEN_W = 720, SCREEN_H = 450, MAP_SIDE = 450;
 
 /* deklaracja zmiennej przetrzymującej kod błędu
 *  <>0 - błąd
