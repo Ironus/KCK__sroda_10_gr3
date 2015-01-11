@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -259,6 +260,32 @@ public:
       ToString = "L4";
       bitmap = al_load_bitmap("images/house.png");
    };
+};
+
+class FileHandler {
+public:
+	void static write(string contents, string filename) {
+		ofstream file;
+
+		file.open(filename);
+		file << contents;
+		file.close();
+	};
+
+	string static read(string filename) {
+		ifstream file;
+		string line;
+		string contents;
+
+		file.open(filename);
+		while (getline(file, line))
+		{
+			contents += line + "\n";
+		}
+		file.close();
+
+		return contents;
+	}
 };
 
 /* deklaracja stałych zawierających szerokość i wysokość okna
@@ -929,8 +956,8 @@ live:
 
    cout << opisTrasy;
 
-
-
+   FileHandler::write(opisTrasy, "opisTrasy.txt");
+   // odczyt pliku: FileHandler::read(string nazwaPliku);
 
    bool done = false;
    ALLEGRO_BITMAP * grassBitmap = NULL;
