@@ -16,9 +16,14 @@ class item {
 public:
    string ToString;
    string dest;
+   bool seen; //zmienna zawierajaca informacje czy dany landmark zostal zobaczony wczesniej
    ALLEGRO_BITMAP *bitmap;
    item() {
       ToString = "1";
+   }
+
+   void setSeen(){
+      seen = true;
    }
 
    string getvalue() {
@@ -271,6 +276,142 @@ public:
 		file << contents;
 		file.close();
 	};
+
+   vector<string> przejdzIZapisz(vector<string>trasaTest, item* siatka[15][15]){ //trzeba gdzies wywolac
+      int pozX = 8;
+      int pozY = 8;
+      string opisLandmarku;
+      trasaTest.push_back("start"); //NAPRAWIC TE PODWOJNE ZMIANY
+      pozY--;
+      for (int i = 0; i<15; i++)
+      {
+         opisLandmarku = ""; //na przyszlosc: ponizsza czesc mozna zredukowac do funkcji
+         if ((siatka[pozX][pozY - 1]->ToString == "L1" || siatka[pozX][pozY - 1]->ToString == "L2" || siatka[pozX][pozY - 1]->ToString == "L3" || siatka[pozX][pozY - 1]->ToString == "L4" || siatka[pozX][pozY - 1]->ToString == "L5") && siatka[pozX][pozY - 1]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX][pozY - 1]->ToString + "blisko na polnocy";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX][pozY - 1]->setSeen();
+         }
+         if ((siatka[pozX][pozY - 2]->ToString == "L1" || siatka[pozX][pozY - 2]->ToString == "L2" || siatka[pozX][pozY - 2]->ToString == "L3" || siatka[pozX][pozY - 2]->ToString == "L4" || siatka[pozX][pozY - 2]->ToString == "L5") && siatka[pozX][pozY - 2]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX][pozY - 2]->ToString + "daleko na polnocy";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX][pozY - 2]->setSeen();
+         }
+         if ((siatka[pozX][pozY + 1]->ToString == "L1" || siatka[pozX][pozY + 1]->ToString == "L2" || siatka[pozX][pozY + 1]->ToString == "L3" || siatka[pozX][pozY + 1]->ToString == "L4" || siatka[pozX][pozY + 1]->ToString == "L5") && siatka[pozX][pozY + 1]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX][pozY + 1]->ToString + "blisko na poludniu";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX][pozY + 1]->setSeen();
+         }
+         if ((siatka[pozX][pozY + 2]->ToString == "L1" || siatka[pozX][pozY + 2]->ToString == "L2" || siatka[pozX][pozY + 2]->ToString == "L3" || siatka[pozX][pozY + 2]->ToString == "L4" || siatka[pozX][pozY + 2]->ToString == "L5") && siatka[pozX][pozY + 2]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX][pozY + 2]->ToString + "daleko na poludniu";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX][pozY + 2]->setSeen();
+         }
+         if ((siatka[pozX - 1][pozY]->ToString == "L1" || siatka[pozX - 1][pozY]->ToString == "L2" || siatka[pozX - 1][pozY]->ToString == "L3" || siatka[pozX - 1][pozY]->ToString == "L4" || siatka[pozX - 1][pozY]->ToString == "L5") && siatka[pozX - 1][pozY]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX - 1][pozY]->ToString + "blisko na zachodzie";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX - 1][pozY]->setSeen();
+         }
+         if ((siatka[pozX - 2][pozY]->ToString == "L1" || siatka[pozX - 2][pozY]->ToString == "L2" || siatka[pozX - 2][pozY]->ToString == "L3" || siatka[pozX - 2][pozY]->ToString == "L4" || siatka[pozX - 2][pozY]->ToString == "L5") && siatka[pozX - 2][pozY]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX - 2][pozY]->ToString + "daleko na zachodzie";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX - 2][pozY]->setSeen();
+         }
+         if ((siatka[pozX + 1][pozY]->ToString == "L1" || siatka[pozX + 1][pozY]->ToString == "L2" || siatka[pozX + 1][pozY]->ToString == "L3" || siatka[pozX + 1][pozY]->ToString == "L4" || siatka[pozX + 1][pozY]->ToString == "L5") && siatka[pozX + 1][pozY]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX + 1][pozY]->ToString + "blisko na wschodzie";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX + 1][pozY]->setSeen();
+         }
+         if ((siatka[pozX + 2][pozY]->ToString == "L1" || siatka[pozX + 2][pozY]->ToString == "L2" || siatka[pozX + 2][pozY]->ToString == "L3" || siatka[pozX + 2][pozY]->ToString == "L4" || siatka[pozX + 2][pozY]->ToString == "L5") && siatka[pozX + 2][pozY]->seen == false){
+            opisLandmarku = "Widze" + siatka[pozX + 2][pozY - 1]->ToString + "daleko na wschodzie";
+            trasaTest.push_back(opisLandmarku);
+            siatka[pozX + 2][pozY]->setSeen();
+         }
+
+
+
+         if (siatka[pozX][pozY]->ToString == "d1"){
+            if (siatka[pozX][pozY]->dest == "2"){
+               trasaTest.push_back("Ide prosto na polnoc");
+               pozY--;
+            }
+            else if (siatka[pozX][pozY]->dest == "4"){
+               trasaTest.push_back("Ide prosto na poludnie");
+               pozY++;
+            };
+         }
+         else if (siatka[pozX][pozY]->ToString == "d2"){
+            if (siatka[pozX][pozY]->dest == "1"){
+               trasaTest.push_back("Ide prosto na wschod");
+               pozX++;
+            }
+            else if (siatka[pozX][pozY]->dest == "3"){
+               trasaTest.push_back("Ide prosto na zachod");
+               pozX--;
+            };
+         }
+         else if (siatka[pozX][pozY]->ToString == "cr"){
+            if (siatka[pozX][pozY]->dest == "1"){
+               trasaTest.push_back("Ide skrzyzowaniem na wschod");
+               pozX++;
+            }
+            else if (siatka[pozX][pozY]->dest == "2"){
+               trasaTest.push_back("Ide skrzyzowaniem na polnoc");
+               pozY--;
+            }
+            else if (siatka[pozX][pozY]->dest == "3"){
+               trasaTest.push_back("Ide skrzyzowaniem na zachod");
+               pozX--;
+            }
+            else if (siatka[pozX][pozY]->dest == "4"){
+               trasaTest.push_back("Ide skrzyzowaniem na poludnie");
+               pozY++;
+            };
+         }
+         else if (siatka[pozX][pozY]->ToString == "z1"){
+            if (siatka[pozX][pozY]->dest == "2"){
+               trasaTest.push_back("Skrecam z zachodu na polnoc");
+               pozY--;
+               //nie wiem czy w zakretach powinny sie obie zmienne zmieniac, czy tylko jedna
+            }
+            else if (siatka[pozX][pozY]->dest == "3"){
+               trasaTest.push_back("Skrecam z polnocy na zachod");
+               pozX--;
+            };
+         }
+         else if (siatka[pozX][pozY]->ToString == "z2"){
+            if (siatka[pozX][pozY]->dest == "1"){
+               trasaTest.push_back("Skrecam z polnocy na wschod");
+               pozY++;
+            }
+            else if (siatka[pozX][pozY]->dest == "2"){
+               trasaTest.push_back("Skrecam z wschodu na polnoc");
+               pozX--;
+            };
+         }
+         else if (siatka[pozX][pozY]->ToString == "z3"){
+            if (siatka[pozX][pozY]->dest == "3"){
+               trasaTest.push_back("Skrecam z poludnia na zachod");
+               pozX--;
+            }
+            else if (siatka[pozX][pozY]->dest == "4"){
+               trasaTest.push_back("Skrecam z zachodu na poludnie");
+               pozY++;
+            };
+         }
+         else if (siatka[pozX][pozY]->ToString == "z4"){
+            if (siatka[pozX][pozY]->dest == "1"){
+               trasaTest.push_back("Skrecam z poludnia na wschod");
+               pozX++;
+            }
+            else if (siatka[pozX][pozY]->dest == "4"){
+               trasaTest.push_back("Skrecam z wschodu na poludnie");
+               pozY++;
+            };
+         };
+      };
+      return trasaTest;
+   };
+
 
 	string static read(string filename) {
 		ifstream file;
@@ -986,8 +1127,8 @@ live:
          cout << endl;
       }
       cout << zmiennalosowania;
-
-
+      FileHandler fh;
+      trasa = fh.przejdzIZapisz(trasa, siatka);
       int round = 0;
       int jump = 15;
       for (int k = 0; k < trasa.size(); k++) {
