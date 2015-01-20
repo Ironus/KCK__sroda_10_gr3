@@ -16,7 +16,7 @@ class item {
 public:
    string ToString;
    string dest;
-   bool seen; //zmienna zawierajaca informacje czy dany landmark zostal zobaczony wczesniej
+   bool seen;
    ALLEGRO_BITMAP *bitmap;
    item() {
       ToString = "1";
@@ -148,11 +148,9 @@ public:
 class Landmark : public item {
 public:
    string image, Nazwa, Atrybut;
-   bool seen; //zmienna zawierajaca informacje czy dany landmark zostal zobaczony wczesniej
    Landmark(string N, string A) {
       Nazwa = N;
       Atrybut = A;
-      seen = 0;
    }
 };
 
@@ -201,7 +199,34 @@ public:
       ToString = "z4";
       bitmap = al_load_bitmap("images/right_turn.png");
    }
-
+};
+class z11 : public Trasa {
+public:
+   z11(bool _lewo = true, bool _prawo = false, bool _gora = true, bool _dol = false) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z11";
+      bitmap = al_load_bitmap("images/left_to_up_turn_sharp.png");
+   }
+};
+class z21 : public Trasa {
+public:
+   z21(bool _lewo = false, bool _prawo = true, bool _gora = true, bool _dol = false) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z21";
+      bitmap = al_load_bitmap("images/right_to_up_turn_sharp.png");
+   }
+};
+class z31 : public Trasa {
+public:
+   z31(bool _lewo = true, bool _prawo = false, bool _gora = false, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z31";
+      bitmap = al_load_bitmap("images/left_turn_sharp.png");
+   }
+};
+class z41 : public Trasa {
+public:
+   z41(bool _lewo = false, bool _prawo = true, bool _gora = false, bool _dol = true) : Trasa(_lewo, _prawo, _gora, _dol){
+      ToString = "z41";
+      bitmap = al_load_bitmap("images/right_turn_sharp.png");
+   }
 };
 class cross : public Trasa {
 public:
@@ -261,7 +286,7 @@ public:
 
 class Dom : public Landmark {
 public:
-   Dom(string __tostr = "L1", string __toatr = "Rodzinny") : Landmark(__tostr, __toatr){
+   Dom(string __tostr = "L4", string __toatr = "Rodzinny") : Landmark(__tostr, __toatr){
       ToString = "L4";
       bitmap = al_load_bitmap("images/house.png");
    };
@@ -269,166 +294,28 @@ public:
 
 class FileHandler {
 public:
-	void static write(string contents, string filename) {
-		ofstream file;
+   void static write(string contents, string filename) {
+      ofstream file;
 
-		file.open(filename);
-		file << contents;
-		file.close();
-	};
-
-   vector<string> przejdzIZapisz(vector<string>trasaTest, item* siatka[15][15]){ //trzeba gdzies wywolac
-      int pozX = 8;
-      int pozY = 8;
-      string opisLandmarku;
-      trasaTest.push_back("start"); //NAPRAWIC TE PODWOJNE ZMIANY
-      pozY--;
-      for (int i = 0; i<15; i++)
-      {
-         opisLandmarku = ""; //na przyszlosc: ponizsza czesc mozna zredukowac do funkcji
-         if ((siatka[pozX][pozY - 1]->ToString == "L1" || siatka[pozX][pozY - 1]->ToString == "L2" || siatka[pozX][pozY - 1]->ToString == "L3" || siatka[pozX][pozY - 1]->ToString == "L4" || siatka[pozX][pozY - 1]->ToString == "L5") && siatka[pozX][pozY - 1]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX][pozY - 1]->ToString + "blisko na polnocy";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX][pozY - 1]->setSeen();
-         }
-         if ((siatka[pozX][pozY - 2]->ToString == "L1" || siatka[pozX][pozY - 2]->ToString == "L2" || siatka[pozX][pozY - 2]->ToString == "L3" || siatka[pozX][pozY - 2]->ToString == "L4" || siatka[pozX][pozY - 2]->ToString == "L5") && siatka[pozX][pozY - 2]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX][pozY - 2]->ToString + "daleko na polnocy";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX][pozY - 2]->setSeen();
-         }
-         if ((siatka[pozX][pozY + 1]->ToString == "L1" || siatka[pozX][pozY + 1]->ToString == "L2" || siatka[pozX][pozY + 1]->ToString == "L3" || siatka[pozX][pozY + 1]->ToString == "L4" || siatka[pozX][pozY + 1]->ToString == "L5") && siatka[pozX][pozY + 1]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX][pozY + 1]->ToString + "blisko na poludniu";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX][pozY + 1]->setSeen();
-         }
-         if ((siatka[pozX][pozY + 2]->ToString == "L1" || siatka[pozX][pozY + 2]->ToString == "L2" || siatka[pozX][pozY + 2]->ToString == "L3" || siatka[pozX][pozY + 2]->ToString == "L4" || siatka[pozX][pozY + 2]->ToString == "L5") && siatka[pozX][pozY + 2]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX][pozY + 2]->ToString + "daleko na poludniu";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX][pozY + 2]->setSeen();
-         }
-         if ((siatka[pozX - 1][pozY]->ToString == "L1" || siatka[pozX - 1][pozY]->ToString == "L2" || siatka[pozX - 1][pozY]->ToString == "L3" || siatka[pozX - 1][pozY]->ToString == "L4" || siatka[pozX - 1][pozY]->ToString == "L5") && siatka[pozX - 1][pozY]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX - 1][pozY]->ToString + "blisko na zachodzie";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX - 1][pozY]->setSeen();
-         }
-         if ((siatka[pozX - 2][pozY]->ToString == "L1" || siatka[pozX - 2][pozY]->ToString == "L2" || siatka[pozX - 2][pozY]->ToString == "L3" || siatka[pozX - 2][pozY]->ToString == "L4" || siatka[pozX - 2][pozY]->ToString == "L5") && siatka[pozX - 2][pozY]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX - 2][pozY]->ToString + "daleko na zachodzie";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX - 2][pozY]->setSeen();
-         }
-         if ((siatka[pozX + 1][pozY]->ToString == "L1" || siatka[pozX + 1][pozY]->ToString == "L2" || siatka[pozX + 1][pozY]->ToString == "L3" || siatka[pozX + 1][pozY]->ToString == "L4" || siatka[pozX + 1][pozY]->ToString == "L5") && siatka[pozX + 1][pozY]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX + 1][pozY]->ToString + "blisko na wschodzie";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX + 1][pozY]->setSeen();
-         }
-         if ((siatka[pozX + 2][pozY]->ToString == "L1" || siatka[pozX + 2][pozY]->ToString == "L2" || siatka[pozX + 2][pozY]->ToString == "L3" || siatka[pozX + 2][pozY]->ToString == "L4" || siatka[pozX + 2][pozY]->ToString == "L5") && siatka[pozX + 2][pozY]->seen == false){
-            opisLandmarku = "Widze" + siatka[pozX + 2][pozY - 1]->ToString + "daleko na wschodzie";
-            trasaTest.push_back(opisLandmarku);
-            siatka[pozX + 2][pozY]->setSeen();
-         }
-
-
-
-         if (siatka[pozX][pozY]->ToString == "d1"){
-            if (siatka[pozX][pozY]->dest == "2"){
-               trasaTest.push_back("Ide prosto na polnoc");
-               pozY--;
-            }
-            else if (siatka[pozX][pozY]->dest == "4"){
-               trasaTest.push_back("Ide prosto na poludnie");
-               pozY++;
-            };
-         }
-         else if (siatka[pozX][pozY]->ToString == "d2"){
-            if (siatka[pozX][pozY]->dest == "1"){
-               trasaTest.push_back("Ide prosto na wschod");
-               pozX++;
-            }
-            else if (siatka[pozX][pozY]->dest == "3"){
-               trasaTest.push_back("Ide prosto na zachod");
-               pozX--;
-            };
-         }
-         else if (siatka[pozX][pozY]->ToString == "cr"){
-            if (siatka[pozX][pozY]->dest == "1"){
-               trasaTest.push_back("Ide skrzyzowaniem na wschod");
-               pozX++;
-            }
-            else if (siatka[pozX][pozY]->dest == "2"){
-               trasaTest.push_back("Ide skrzyzowaniem na polnoc");
-               pozY--;
-            }
-            else if (siatka[pozX][pozY]->dest == "3"){
-               trasaTest.push_back("Ide skrzyzowaniem na zachod");
-               pozX--;
-            }
-            else if (siatka[pozX][pozY]->dest == "4"){
-               trasaTest.push_back("Ide skrzyzowaniem na poludnie");
-               pozY++;
-            };
-         }
-         else if (siatka[pozX][pozY]->ToString == "z1"){
-            if (siatka[pozX][pozY]->dest == "2"){
-               trasaTest.push_back("Skrecam z zachodu na polnoc");
-               pozY--;
-               //nie wiem czy w zakretach powinny sie obie zmienne zmieniac, czy tylko jedna
-            }
-            else if (siatka[pozX][pozY]->dest == "3"){
-               trasaTest.push_back("Skrecam z polnocy na zachod");
-               pozX--;
-            };
-         }
-         else if (siatka[pozX][pozY]->ToString == "z2"){
-            if (siatka[pozX][pozY]->dest == "1"){
-               trasaTest.push_back("Skrecam z polnocy na wschod");
-               pozY++;
-            }
-            else if (siatka[pozX][pozY]->dest == "2"){
-               trasaTest.push_back("Skrecam z wschodu na polnoc");
-               pozX--;
-            };
-         }
-         else if (siatka[pozX][pozY]->ToString == "z3"){
-            if (siatka[pozX][pozY]->dest == "3"){
-               trasaTest.push_back("Skrecam z poludnia na zachod");
-               pozX--;
-            }
-            else if (siatka[pozX][pozY]->dest == "4"){
-               trasaTest.push_back("Skrecam z zachodu na poludnie");
-               pozY++;
-            };
-         }
-         else if (siatka[pozX][pozY]->ToString == "z4"){
-            if (siatka[pozX][pozY]->dest == "1"){
-               trasaTest.push_back("Skrecam z poludnia na wschod");
-               pozX++;
-            }
-            else if (siatka[pozX][pozY]->dest == "4"){
-               trasaTest.push_back("Skrecam z wschodu na poludnie");
-               pozY++;
-            };
-         };
-      };
-      return trasaTest;
+      file.open(filename);
+      file << contents;
+      file.close();
    };
+   string static read(string filename) {
+      ifstream file;
+      string line;
+      string contents;
 
+      file.open(filename);
+      while (getline(file, line))
+      {
+         contents += line + "\n";
+      }
+      file.close();
 
-	string static read(string filename) {
-		ifstream file;
-		string line;
-		string contents;
-
-		file.open(filename);
-		while (getline(file, line))
-		{
-			contents += line + "\n";
-		}
-		file.close();
-
-		return contents;
-	}
+      return contents;
+   }
 };
-
 /* deklaracja stałych zawierających szerokość i wysokość okna
 *  width = 2 * 300px - po 300px na agenta + 10 na przerwe między ich mapami
 *  height = 500px - 300 na wysokość mapki + 200 na log tekstowy z trasą
@@ -436,7 +323,7 @@ public:
 *  a wieloczłonowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 720, SCREEN_H = 450, MAP_SIDE = 450;
+const short SCREEN_W = 715, SCREEN_H = 450, MAP_SIDE = 450;
 
 /* deklaracja zmiennej przetrzymującej kod błędu
 *  <>0 - błąd
@@ -545,11 +432,12 @@ int main() {
 
    vector<string>trasa;
 
-losowanie:
+
    //int element = rand() % 5 + 1;      //losowanie elementu
    int kierunek = rand() % 4 + 1;      //losowanie kierunku
 
    if (kierunek == 1 && prawo(x, y, siatka) == true){
+      siatka[y][x]->nadajDest("1");
    kier1:
       if (i >= 16) goto live;
       else{
@@ -563,111 +451,183 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new d2();
             siatka[y][x]->nadajDest("1");
-            opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
-            trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
+            opisTrasy += "Ide na wschod";
+            trasa.push_back("Ide na wschod");
             i++;
             goto kier1;
          }
          if (tempsum == 2) {
-            siatka[y][x] = new z1();
-            siatka[y][x]->nadajDest("2"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5));
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam z zachodu na polnoc";
+               trasa.push_back("Skrecam z zachodu na polnoc");
+
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na polnoc";
+               trasa.push_back("Skrecam ostro z zachodu na polnoc");
+            }
             goto kier2;
          }
          if (tempsum == 3) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
+               opisTrasy += "Ide na wschod";
+               trasa.push_back("Ide na wschod");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5));
-               goto kier2;
+               opisTrasy += "Skrecam z zachodu na polnoc";
+               trasa.push_back("Skrecam z zachodu na polnoc");
             }
+            if (temprand == 3){
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na polnoc";
+               trasa.push_back("Skrecam ostro z zachodu na polnoc");
+            }
+            goto kier2;
          }
+
          if (tempsum == 4) {
-            siatka[y][x] = new z3();
-            siatka[y][x]->nadajDest("4"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5));
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam z zachodu na poludnie";
+               trasa.push_back("Skrecam z zachodu na poludnie");
+
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na poludnie";
+               trasa.push_back("Skrecam ostro z zachodu na poludnie");
+            }
             goto kier4;
          }
          if (tempsum == 5) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
+               opisTrasy += "Ide na wschod";
+               trasa.push_back("Ide na wschod");
                goto kier1;
             }
             if (temprand == 2) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z zachodu na poludnie";
+               trasa.push_back("Skrecam z zachodu na poludnie");
+               goto kier4;
+            }
+            if (temprand == 3){
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na poludnie";
+               trasa.push_back("Skrecam ostro z zachodu na poludnie");
                goto kier4;
             }
          }
          if (tempsum == 6) {
-            int temprand = rand() % 2 + 1;
-            if (temprand == 1) {
-               siatka[y][x] = new z1();
-               siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5));
-               goto kier2;
-            }
-            if (temprand == 2) {
-               siatka[y][x] = new z3();
-               siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5));
-               goto kier4;
-            }
-         }
-         if (tempsum == 7) {
             int temprand = rand() % 4 + 1;
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z zachodu na polnoc";
+               trasa.push_back("Skrecam z zachodu na polnoc");
                goto kier2;
             }
-            if (temprand == 2) {
-               siatka[y][x] = new z3();
-               siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x - 1, y, x + 0.5, y + 0.5));
-               goto kier4;
+            if (temprand == 2){
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na polnoc";
+               trasa.push_back("Skrecam ostro z zachodu na polnoc");
+               goto kier2;
             }
             if (temprand == 3) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam z zachodu na poludnie";
+               trasa.push_back("Skrecam z zachodu na poludnie");
+               goto kier4;
+            }
+            if (temprand == 4) {
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na poludnie";
+               trasa.push_back("Skrecam ostro z zachodu na poludnie");
+               goto kier4;
+            }
+         }
+         if (tempsum == 7) {
+            int temprand = rand() % 6 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam z zachodu na polnoc";
+               trasa.push_back("Skrecam z zachodu na polnoc");
+               goto kier2;
+            }
+            if (temprand == 2){
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na polnoc";
+               trasa.push_back("Skrecam ostro z zachodu na polnoc");
+               goto kier2;
+            }
+            if (temprand == 3) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam z zachodu na poludnie";
+               trasa.push_back("Skrecam z zachodu na poludnie");
+               goto kier4;
+            }
+            if (temprand == 4) {
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z zachodu na poludnie";
+               trasa.push_back("Skrecam ostro z zachodu na poludnie");
+               goto kier4;
+
+            }
+            if (temprand == 5) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x - 1, y);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x - 1, y));
+               opisTrasy += "Ide na wschod";
+               trasa.push_back("Ide na wschod");
                goto kier1;
             }
-            if (temprand == 4){
+            if (temprand == 6){
                siatka[y][x] = new cross(); i++;
                int temprandcross = rand() % 3 + 1;
                if (temprandcross == 1){
+                  siatka[y][x]->nadajDest("2");
+                  opisTrasy += "Na skrzyzowaniu ide na polnoc";
+                  trasa.push_back("Na skrzyzowaniu ide na polnoc");
                   goto kier2;
 
                }
                if (temprandcross == 2){
+                  siatka[y][x]->nadajDest("1");
+                  opisTrasy += "Na skrzyzowaniu ide na wschod";
+                  trasa.push_back("Na skrzyzowaniu ide na wschod");
                   goto kier1;
 
                }
-               if (temprandcross == 1){
+               if (temprandcross == 3){
+                  siatka[y][x]->nadajDest("4");
+                  opisTrasy += "Na skrzyzowaniu ide na poludnie";
+                  trasa.push_back("Na skrzyzowaniu ide na poludnie");
                   goto kier4;
 
                }
@@ -681,9 +641,10 @@ losowanie:
    }
 
 
-
+   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   2
 
    if (kierunek == 2 && gora(x, y, siatka) == true){
+      siatka[y][x]->nadajDest("2");
    kier2:
       if (i >= 16) goto live;
       else{
@@ -695,113 +656,195 @@ losowanie:
 
 
          if (tempsum == 1) {
-            siatka[y][x] = new z4();
-            siatka[y][x]->nadajDest("1"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5));
+
+
+
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam z poludnia na wschod";
+               trasa.push_back("Skrecam z poludnia na wschod");
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na wschod";
+               trasa.push_back("Skrecam ostro z poludnia na wschod");
+            }
+
             goto kier1;
          }
          if (tempsum == 2) {
             siatka[y][x] = new d1();
             siatka[y][x]->nadajDest("2"); i++;
-            opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
-            trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
+            opisTrasy += "Ide na polnoc";
+            trasa.push_back("Ide na polnoc");
             goto kier2;
          }
          if (tempsum == 3) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
+               opisTrasy += "Ide na polnoc";
+               trasa.push_back("Ide na polnoc");
                goto kier2;
             }
             if (temprand == 2) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z poludnia na wschod";
+               trasa.push_back("Skrecam z poludnia na wschod");
+               goto kier1;
+            }
+            if (temprand == 3){
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na wschod";
+               trasa.push_back("Skrecam ostro z poludnia na wschod");
                goto kier1;
             }
          }
          if (tempsum == 4) {
-            siatka[y][x] = new z3();
-            siatka[y][x]->nadajDest("3"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5));
+
+
+
+
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam z poludnia na zachod";
+               trasa.push_back("Skrecam z poludnia na zachod");
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na zachod";
+               trasa.push_back("Skrecam ostro z poludnia na zachod");
+            }
+
+
+
             goto kier3;
          }
          if (tempsum == 5) {
-            int temprand = rand() % 2 + 1;
-            if (temprand == 1) {
-               siatka[y][x] = new z4();
-               siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5));
-               goto kier1;
-            }
-            if (temprand == 2) {
-               siatka[y][x] = new z3();
-               siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5));
-               goto kier3;
-            }
-         }
-         if (tempsum == 6) {
-            int temprand = rand() % 2 + 1;
-            if (temprand == 1) {
-               siatka[y][x] = new d1();
-               siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
-               goto kier2;
-            }
-            if (temprand == 2) {
-               siatka[y][x] = new z3();
-               siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5));
-               goto kier3;
-            }
-         }
-         if (tempsum == 7) {
             int temprand = rand() % 4 + 1;
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z poludnia na wschod";
+               trasa.push_back("Skrecam z poludnia na wschod");
                goto kier1;
             }
             if (temprand == 2) {
-               siatka[y][x] = new d1();
-               siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y + 1);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y + 1));
-               goto kier2;
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na wschod";
+               trasa.push_back("Skrecam ostro z poludnia na wschod");
+               goto kier1;
             }
             if (temprand == 3) {
                siatka[y][x] = new z3();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y - 1, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z poludnia na zachod";
+               trasa.push_back("Skrecam z poludnia na zachod");
                goto kier3;
             }
             if (temprand == 4){
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na zachod";
+               trasa.push_back("Skrecam ostro z poludnia na zachod");
+               goto kier3;
+
+
+            }
+         }
+         if (tempsum == 6) {
+            int temprand = rand() % 3 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Ide na polnoc";
+               trasa.push_back("Ide na polnoc");
+               goto kier2;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam z poludnia na zachod";
+               trasa.push_back("Skrecam z poludnia na zachod");
+               goto kier3;
+            }
+            if (temprand == 3){
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na zachod";
+               trasa.push_back("Skrecam ostro z poludnia na zachod");
+               goto kier3;
+            }
+         }
+         if (tempsum == 7) {
+            int temprand = rand() % 6 + 1;
+            if (temprand == 1) {
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam z poludnia na wschod";
+               trasa.push_back("Skrecam z poludnia na wschod");
+               goto kier1;
+            }
+            if (temprand == 2) {
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na wschod";
+               trasa.push_back("Skrecam ostro z poludnia na wschod");
+               goto kier1;
+            }
+            if (temprand == 3) {
+               siatka[y][x] = new d1();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Ide na polnoc";
+               trasa.push_back("Ide na polnoc");
+               goto kier2;
+            }
+            if (temprand == 4) {
+               siatka[y][x] = new z3();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam z poludnia na zachod";
+               trasa.push_back("Skrecam z poludnia na zachod");
+               goto kier3;
+            }
+            if (temprand == 5) {
+               siatka[y][x] = new z31();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z poludnia na zachod";
+               trasa.push_back("Skrecam ostro z poludnia na zachod");
+               goto kier3;
+            }
+            if (temprand == 6){
                siatka[y][x] = new cross(); i++;
                int temprandcross = rand() % 3 + 1;
                if (temprandcross == 1){
+                  siatka[y][x]->nadajDest("1");
+                  opisTrasy += "Na skrzyzowaniu ide na wschod";
+                  trasa.push_back("Na skrzyzowaniu ide na wschod");
                   goto kier1;
 
                }
                if (temprandcross == 2){
+                  siatka[y][x]->nadajDest("3");
+                  opisTrasy += "Na skrzyzowaniu ide na zachod";
+                  trasa.push_back("Na skrzyzowaniu ide na zachod");
                   goto kier3;
 
                }
-               if (temprandcross == 1){
-                  goto kier4;
+               if (temprandcross == 3){
+                  siatka[y][x]->nadajDest("2");
+                  opisTrasy += "Na skrzyzowaniu ide na polnoc";
+                  trasa.push_back("Na skrzyzowaniu ide na polnoc");
+                  goto kier2;
 
                }
 
@@ -810,8 +853,9 @@ losowanie:
       }
    }
 
-
+   /////////////////////////////////////////////////////////////////////////////////////////////////////////   3
    if (kierunek == 3 && lewo(x, y, siatka) == true){
+      siatka[y][x]->nadajDest("3");
    kier3:
       if (i >= 16) goto live;
       else{
@@ -823,111 +867,184 @@ losowanie:
 
 
          if (tempsum == 1) {
-            siatka[y][x] = new z4();
-            siatka[y][x]->nadajDest("4"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5));
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z4();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam z wschodu na poludnie";
+               trasa.push_back("Skrecam z wschodu na poludnie");
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na poludnie";
+               trasa.push_back("Skrecam ostro z wschodu na poludnie");
+            }
             goto kier4;
          }
          if (tempsum == 2) {
-            siatka[y][x] = new z2();
-            siatka[y][x]->nadajDest("2"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5));
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam z wschodu na polnoc";
+               trasa.push_back("Skrecam z wschodu na polnoc");
+
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na polnoc";
+               trasa.push_back("Skrecam ostro z wschodu na polnoc");
+            }
             goto kier2;
          }
          if (tempsum == 3) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 4 + 1;
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z wschodu na poludnie";
+               trasa.push_back("Skrecam z wschodu na poludnie");
                goto kier4;
             }
-            if (temprand == 2) {
+            if (temprand == 2){
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na poludnie";
+               trasa.push_back("Skrecam ostro z wschodu na poludnie");
+            }
+            if (temprand == 3) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z wschodu na polnoc";
+               trasa.push_back("Skrecam z wschodu na polnoc");
+               goto kier2;
+            }
+            if (temprand == 4){
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na polnoc";
+               trasa.push_back("Skrecam ostro z wschodu na polnoc");
                goto kier2;
             }
          }
          if (tempsum == 4) {
             siatka[y][x] = new d2();
             siatka[y][x]->nadajDest("3"); i++;
-            opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
-            trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
+            opisTrasy += "Ide na zachod";
+            trasa.push_back("Ide na zachod");
             goto kier3;
          }
          if (tempsum == 5) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new z4();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z wschodu na poludnie";
+               trasa.push_back("Skrecam z wschodu na poludnie");
                goto kier4;
             }
-            if (temprand == 2) {
+            if (temprand == 2){
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("4"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na poludnie";
+               trasa.push_back("Skrecam ostro z wschodu na poludnie");
+               goto kier4;
+            }
+            if (temprand == 3) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
+               opisTrasy += "Ide na zachod";
+               trasa.push_back("Ide na zachod");
                goto kier3;
             }
          }
          if (tempsum == 6) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new d2();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
+               opisTrasy += "Ide na zachod";
+               trasa.push_back("Ide na zachod");
                goto kier3;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z wschodu na polnoc";
+               trasa.push_back("Skrecam z wschodu na polnoc");
                goto kier2;
+            }
+            if (temprand == 3){
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na polnoc";
+               trasa.push_back("Skrecam ostro z wschodu na polnoc");
+               goto kier2;
+
             }
          }
          if (tempsum == 7) {
-            int temprand = rand() % 4 + 1;
+            int temprand = rand() % 6 + 1;
             if (temprand == 1) {
                siatka[y][x] = new z4();
-               siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x + 0.5, y + 0.5));
+               siatka[y][x]->nadajDest("4"); i++; //Dominik - bylo nadajdest("1"), jak tak mialo byc to poprawcie z powrotem
+               opisTrasy += "Skrecam z wschodu na poludnie";
+               trasa.push_back("Skrecam z wschodu na poludnie");
                goto kier4;
             }
-            if (temprand == 2) {
-               siatka[y][x] = new z2();
-               siatka[y][x]->nadajDest("2"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x + 1, y, x - 0.5, y - 0.5));
-               goto kier2;
+            if (temprand == 2){
+               siatka[y][x] = new z41();
+               siatka[y][x]->nadajDest("4"); i++; // tutaj tez
+               opisTrasy += "Skrecam ostro z wschodu na poludnie";
+               trasa.push_back("Skrecam ostro z wschodu na poludnie");
+               goto kier4;
+
             }
             if (temprand == 3) {
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam z wschodu na polnoc";
+               trasa.push_back("Skrecam z wschodu na polnoc");
+               goto kier2;
+            }
+            if (temprand == 4) {
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("2"); i++;
+               opisTrasy += "Skrecam ostro z wschodu na polnoc";
+               trasa.push_back("Skrecam ostro z wschodu na polnoc");
+               goto kier2;
+
+            }
+            if (temprand == 5) {
                siatka[y][x] = new d2();
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x + 1, y);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x + 1, y));
+               siatka[y][x]->nadajDest("3"); i++; //Dominik - dodalem bo chyba brakowalo, jak sie myle to wywalcie
+               opisTrasy += "Ide na zachod";
+               trasa.push_back("Ide na zachod");
                goto kier3;
             }
-            if (temprand == 4){
+            if (temprand == 6){
                siatka[y][x] = new cross(); i++;
                int temprandcross = rand() % 3 + 1;
                if (temprandcross == 1){
+                  siatka[y][x]->nadajDest("2");
+                  opisTrasy += "Na skrzyzowaniu ide na polnoc";
+                  trasa.push_back("Na skrzyzowaniu ide na polnoc");
                   goto kier2;
 
                }
                if (temprandcross == 2){
+                  siatka[y][x]->nadajDest("3");
+                  opisTrasy += "Na skrzyzowaniu ide na zachod";
+                  trasa.push_back("Na skrzyzowaniu ide na zachod");
                   goto kier3;
 
                }
-               if (temprandcross == 1){
+               if (temprandcross == 3){
+                  siatka[y][x]->nadajDest("4");
+                  opisTrasy += "Na skrzyzowaniu ide na poludnie";
+                  trasa.push_back("Na skrzyzowaniu ide na poludnie");
                   goto kier4;
 
                }
@@ -939,6 +1056,7 @@ losowanie:
 
 
    if (kierunek == 4 && dol(x, y, siatka) == true){
+      siatka[y][x]->nadajDest("4");
    kier4:
       if (i >= 16) goto live;
       else{
@@ -952,72 +1070,119 @@ losowanie:
          if (tempsum == 1) {
             siatka[y][x] = new d1();
             siatka[y][x]->nadajDest("4"); i++;
-            opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
-            trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
+            opisTrasy += "Ide na poludnie";
+            trasa.push_back("Ide na poludnie");
             goto kier4;
          }
          if (tempsum == 2) {
-            siatka[y][x] = new z2();
-            siatka[y][x]->nadajDest("1"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5));
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z2();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam z polnocy na wschod";
+               trasa.push_back("Skrecam z polnocy na wschod");
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na wschod";
+               trasa.push_back("Skrecam ostro z polnocy na wschod");
+            }
             goto kier1;
          }
          if (tempsum == 3) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
+               opisTrasy += "Ide na poludnie";
+               trasa.push_back("Ide na poludnie");
                goto kier4;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z polnocy na wschod";
+               trasa.push_back("Skrecam z polnocy na wschod");
                goto kier1;
+            }
+            if (tempsum == 3) {
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na wschod";
+               trasa.push_back("Skrecam ostro z polnocy na wschod");
+               goto kier1;
+
             }
          }
          if (tempsum == 4) {
-            siatka[y][x] = new z1();
-            siatka[y][x]->nadajDest("3"); i++;
-            opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5);
-            trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5));
+            int templuk = rand() % 2 + 1;
+            if (templuk == 1){
+               siatka[y][x] = new z1();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam z polnocy na zachod";
+               trasa.push_back("Skrecam z polnocy na zachod");
+            }
+            if (templuk == 2){
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na zachod";
+               trasa.push_back("Skrecam ostro z polnocy na zachod");
+            }
             goto kier3;
          }
          if (tempsum == 5) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 3 + 1;
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
+               opisTrasy += "Ide na poludnie";
+               trasa.push_back("Ide na poludnie");
                goto kier4;
             }
             if (temprand == 2) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z polnocy na zachod";
+               trasa.push_back("Skrecam z polnocy na zachod");
+               goto kier3;
+            }
+            if (temprand == 3){
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na zachod";
+               trasa.push_back("Skrecam ostro z polnocy na zachod");
                goto kier3;
             }
          }
          if (tempsum == 6) {
-            int temprand = rand() % 2 + 1;
+            int temprand = rand() % 4 + 1;
             if (temprand == 1) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z polnocy na zachod";
+               trasa.push_back("Skrecam z polnocy na zachod");
                goto kier3;
             }
             if (temprand == 2) {
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na zachod";
+               trasa.push_back("Skrecam ostro z polnocy na zachod");
+               goto kier3;
+            }
+            if (temprand == 3) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z polnocy na wschod";
+               trasa.push_back("Skrecam z polnocy na wschod");
+               goto kier1;
+            }
+            if (temprand == 4) {
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na wschod";
+               trasa.push_back("Skrecam ostro z polnocy na wschod");
                goto kier1;
             }
          }
@@ -1026,36 +1191,59 @@ losowanie:
             if (temprand == 1) {
                siatka[y][x] = new d1();
                siatka[y][x]->nadajDest("4"); i++;
-               opisTrasy += makeLine("PROSTA DROGA", x, y, x, y - 1);
-               trasa.push_back(makeLine("PROSTA DROGA", x, y, x, y - 1));
+               opisTrasy += "Ide na poludnie";
+               trasa.push_back("Ide na poludnie");
                goto kier4;
             }
             if (temprand == 2) {
                siatka[y][x] = new z2();
                siatka[y][x]->nadajDest("1"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x + 0.5, y + 0.5));
+               opisTrasy += "Skrecam z polnocy na wschod";
+               trasa.push_back("Skrecam z polnocy na wschod");
                goto kier1;
             }
             if (temprand == 3) {
+               siatka[y][x] = new z21();
+               siatka[y][x]->nadajDest("1"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na wschod";
+               trasa.push_back("Skrecam ostro z polnocy na wschod");
+               goto kier1;
+            }
+            if (temprand == 4) {
                siatka[y][x] = new z1();
                siatka[y][x]->nadajDest("3"); i++;
-               opisTrasy += makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5);
-               trasa.push_back(makeLineLUK("LAGODNY LUK", x, y, x, y + 1, x - 0.5, y - 0.5));
+               opisTrasy += "Skrecam z polnocy na zachod";
+               trasa.push_back("Skrecam z polnocy na zachod");
                goto kier3;
             }
-            if (temprand == 4){
+            if (temprand == 5) {
+               siatka[y][x] = new z11();
+               siatka[y][x]->nadajDest("3"); i++;
+               opisTrasy += "Skrecam ostro z polnocy na zachod";
+               trasa.push_back("Skrecam ostro z polnocy na zachod");
+               goto kier3;
+            }
+            if (temprand == 6){
                siatka[y][x] = new cross(); i++;
                int temprandcross = rand() % 3 + 1;
                if (temprandcross == 1){
+                  siatka[y][x]->nadajDest("3");
+                  opisTrasy += "Na skrzyzowaniu ide na zachod";
+                  trasa.push_back("Na skrzyzowaniu ide na zachod");
                   goto kier3;
 
                }
                if (temprandcross == 2){
+                  siatka[y][x]->nadajDest("1");
+                  opisTrasy += "Na skrzyzowaniu ide na wschod";
+                  trasa.push_back("Na skrzyzowaniu ide na wschod");
                   goto kier1;
 
                }
-               if (temprandcross == 1){
+               if (temprandcross == 3){
+                  siatka[y][x]->nadajDest("4");
+                  opisTrasy += "Na skrzyzowaniu ide na poludnie";
+                  trasa.push_back("Na skrzyzowaniu ide na poludnie");
                   goto kier4;
 
                }
@@ -1064,13 +1252,11 @@ losowanie:
          }
       }
    }
-   else
-   {
-      goto losowanie;
-      zmiennalosowania++;
-   }
+
    if (prawo(x, y, siatka) == false && lewo(x, y, siatka) == false && gora(x, y, siatka) == false && dol(x, y, siatka) == false){
       siatka[y][x] = new stop();
+      opisTrasy += "Koniec trasy";
+      trasa.push_back("Koniec Trasy");
       i = 10;
    }
 
@@ -1081,24 +1267,22 @@ losowanie:
 live:
    siatka[y][x] = new stop;
    int j = 0;
-   while (j != 20){
-      int __x = rand() % 15;
-      int __y = rand() % 15;
-      if (siatka[__y][__x] == NULL){
-         int _los = rand() % 5;
-         if (_los == 0) siatka[__y][__x] = new dDrzewo();
-         if (_los == 1) siatka[__y][__x] = new mDrzewo();
-         if (_los == 2) siatka[__y][__x] = new Kamien();
-         if (_los == 3) siatka[__y][__x] = new Dom();
-         if (_los == 4) siatka[__y][__x] = new Krzak();
-         j++;
+
+   ///////////////////////////////////////////////////////////////////////////////////////////////
+   //                                  ZEROWANIE   X I Y   Z TRASY                              //
+   ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+      while (siatka[y][x]->ToString != "Sp"){
+         if (prawo(x, y, siatka) == true) {}
+         if (lewo(x, y, siatka) == true) {}
+         if (gora(x, y, siatka) == true) {}
+         if (dol(x, y, siatka) == true) {}
       }
-   }
-
+   
    cout << opisTrasy;
-
+   trasa[trasa.size() - 1] = "STOP";
    FileHandler::write(opisTrasy, "opisTrasy.txt");
-   // odczyt pliku: FileHandler::read(string nazwaPliku);
 
    bool done = false;
    ALLEGRO_BITMAP * grassBitmap = NULL;
@@ -1113,6 +1297,7 @@ live:
                al_draw_bitmap(grassBitmap, l * 30, m * 30, NULL);
          }
       }
+
       for (int l = 0; l < 15; l++){
          for (int m = 0; m < 15; m++) {
             if (siatka[l][m] != NULL)
@@ -1126,9 +1311,9 @@ live:
          }
          cout << endl;
       }
-      cout << zmiennalosowania;
-      FileHandler fh;
-      trasa = fh.przejdzIZapisz(trasa, siatka);
+
+
+
       int round = 0;
       int jump = 15;
       for (int k = 0; k < trasa.size(); k++) {
