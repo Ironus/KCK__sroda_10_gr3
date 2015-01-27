@@ -316,6 +316,106 @@ public:
       return contents;
    }
 };
+
+/////// LOSOWANIE LANDMARKÓW
+
+item* getRandomLand(){
+   int landki;
+   srand(time(NULL));
+   landki = rand() % 4;
+   switch (landki) {
+   case 0: {
+      dDrzewo *d = new dDrzewo();
+      return d;
+      break;
+   }
+   case 1: {
+      Kamien *k = new Kamien();
+      return k;
+      break;
+   }
+   case 2: {
+      Dom *dm = new Dom();
+      return dm;
+      break;
+   }
+   case 3: {
+      mDrzewo *mD = new mDrzewo();
+      return mD;
+      break;
+   }
+   case 4: {
+      Krzak *krz = new Krzak();
+      return krz;
+      break;
+   }
+   }
+}
+
+////sprawdzanie elementów obok drogi 
+
+void sprawdz(int kier, int _x, int _y, item *tab[15][15]){
+   tab[8][8];
+   int los;
+sprawdzanie:
+   if (kier == 1){
+      if (tab[_y - 1][_x] == NULL || tab[_y + 1][_x] == NULL){
+         srand(time(NULL));
+         los = rand() % 2;
+         if (los == 1)
+            tab[_y - 1][_x] = getRandomLand();
+         else if (los == 2)
+            tab[_y + 1][_x] = getRandomLand();
+         else{
+            tab[_y][_x + 1];
+            goto sprawdzanie;
+         }
+      }
+   }
+   if (kier == 2){
+      if (tab[_y][_x - 1] == NULL || tab[_y][_x + 1] == NULL){
+         srand(time(NULL));
+         los = rand() % 2;
+         if (los == 1)
+            tab[_y][_x - 1] = getRandomLand();
+         else if (los == 2)
+            tab[_y][_x + 1] = getRandomLand();
+         else{
+            tab[_y + 1][_x];
+            goto sprawdzanie;
+         }
+      }
+   }
+   if (kier == 3){
+      if (tab[_y - 1][_x] == NULL || tab[_y + 1][_x] == NULL){
+         srand(time(NULL));
+         los = rand() % 2;
+         if (los == 1)
+            tab[_y - 1][_x] = getRandomLand();
+         else if (los == 2)
+            tab[_y + 1][_x] = getRandomLand();
+         else{
+            tab[_y][_x - 1];
+            goto sprawdzanie;
+         }
+      }
+   }
+   if (kier == 4){
+      if (tab[_y][_x - 1] == NULL || tab[_y][_x + 1] == NULL){
+         srand(time(NULL));
+         los = rand() % 2;
+         if (los == 1)
+            tab[_y][_x - 1] = getRandomLand();
+         else if (los == 2)
+            tab[_y][_x + 1] = getRandomLand();
+         else{
+            tab[_y + 1][_x];
+            goto sprawdzanie;
+         }
+      }
+   }
+}
+
 /* deklaracja stałych zawierających szerokość i wysokość okna
 *  width = 2 * 300px - po 300px na agenta + 10 na przerwe między ich mapami
 *  height = 500px - 300 na wysokość mapki + 200 na log tekstowy z trasą
@@ -1268,18 +1368,25 @@ live:
    siatka[y][x] = new stop;
    int j = 0;
 
+   /*
+   *
+   *
+   *  Tu wywolaj funkcje
+   *
+   */
+
    ///////////////////////////////////////////////////////////////////////////////////////////////
    //                                  ZEROWANIE   X I Y   Z TRASY                              //
    ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-      while (siatka[y][x]->ToString != "Sp"){
-         if (prawo(x, y, siatka) == true) {}
-         if (lewo(x, y, siatka) == true) {}
-         if (gora(x, y, siatka) == true) {}
-         if (dol(x, y, siatka) == true) {}
-      }
-   
+   while (siatka[y][x]->ToString != "Sp"){
+      if (prawo(x, y, siatka) == true) {}
+      if (lewo(x, y, siatka) == true) {}
+      if (gora(x, y, siatka) == true) {}
+      if (dol(x, y, siatka) == true) {}
+   }
+
    cout << opisTrasy;
    trasa[trasa.size() - 1] = "STOP";
    FileHandler::write(opisTrasy, "opisTrasy.txt");
