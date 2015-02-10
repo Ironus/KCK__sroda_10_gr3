@@ -14,6 +14,7 @@ using namespace std;
 
 class item {
 public:
+   string nazwa;
    string ToString;
    string dest;
    bool seen;
@@ -256,6 +257,7 @@ class dDrzewo : public Landmark {
 public:
    dDrzewo(string __tostr = "L1", string __toatr = "Duże") : Landmark(__tostr, __toatr){
       ToString = "L1";
+      nazwa = "duze drzewo";
       bitmap = al_load_bitmap("images/tree2.png");
    };
 };
@@ -264,6 +266,7 @@ class mDrzewo : public Landmark {
 public:
    mDrzewo(string __tostr = "L2", string __toatr = "Małe") : Landmark(__tostr, __toatr){
       ToString = "L2";
+      nazwa = "male drzewo";
       bitmap = al_load_bitmap("images/tree.png");
    };
 };
@@ -272,6 +275,7 @@ class Kamien : public Landmark {
 public:
    Kamien(string __tostr = "L3", string __toatr = "Twardy") : Landmark(__tostr, __toatr){
       ToString = "L3";
+      nazwa = "twardy kamien";
       bitmap = al_load_bitmap("images/stone.png");
    };
 };
@@ -280,6 +284,7 @@ class Krzak : public Landmark {
 public:
    Krzak(string __tostr = "L5", string __toatr = "Zielony") : Landmark(__tostr, __toatr){
       ToString = "L5";
+      nazwa = "zielony krzak";
       bitmap = al_load_bitmap("images/bush.png");
    };
 };
@@ -288,6 +293,7 @@ class Dom : public Landmark {
 public:
    Dom(string __tostr = "L4", string __toatr = "Rodzinny") : Landmark(__tostr, __toatr){
       ToString = "L4";
+      nazwa = "dom rodzinny";
       bitmap = al_load_bitmap("images/house.png");
    };
 };
@@ -327,93 +333,97 @@ item* getRandomLand(){
    case 0: {
       dDrzewo *d = new dDrzewo();
       return d;
-      break;
    }
    case 1: {
       Kamien *k = new Kamien();
       return k;
-      break;
    }
    case 2: {
       Dom *dm = new Dom();
       return dm;
-      break;
    }
    case 3: {
       mDrzewo *mD = new mDrzewo();
       return mD;
-      break;
    }
    case 4: {
       Krzak *krz = new Krzak();
       return krz;
-      break;
    }
    }
 }
 
 ////sprawdzanie elementów obok drogi 
 
-void sprawdz(string kier, int _x, int _y, item *tab[15][15]){
-   tab[8][8];
+vector<string>trasa;
+item* siatka[15][15];
+
+void sprawdz(string kier, int _x, int _y){
+   
    int los;
-sprawdzanie:
-   if (kier == "1"){
-      if (tab[_y - 1][_x] == NULL || tab[_y + 1][_x] == NULL){
+   int x = _x;
+   int y = _y;
+   for (int i = 0; i < 15; i++)
+      if (kier == "1"){
          srand(time(NULL));
          los = rand() % 2;
-         if (los == 1)
-            tab[_y - 1][_x] = getRandomLand();
-         else if (los == 2)
-            tab[_y + 1][_x] = getRandomLand();
+         if (siatka[_y - 1][_x] == NULL && los == 1){
+            siatka[_y - 1][_x] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
+         }
+         else if (siatka[_y + 1][_x] == NULL && los == 2){
+            siatka[_y + 1][_x] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
+         }
          else{
-            tab[_y][_x + 1];
-            goto sprawdzanie;
+            x++;
          }
       }
-   }
-   if (kier == "2"){
-      if (tab[_y][_x - 1] == NULL || tab[_y][_x + 1] == NULL){
+
+      else if (kier == "2"){
          srand(time(NULL));
          los = rand() % 2;
-         if (los == 1)
-            tab[_y][_x - 1] = getRandomLand();
-         else if (los == 2)
-            tab[_y][_x + 1] = getRandomLand();
-         else{
-            tab[_y + 1][_x];
-            goto sprawdzanie;
+         if (siatka[_y][_x - 1] == NULL && los == 1){
+            siatka[_y][_x - 1] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
          }
+         else if (siatka[_y][_x + 1] == NULL && los == 2){
+            siatka[_y][_x + 1] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
+         }
+         else
+            y--;
+
       }
-   }
-   if (kier == "3"){
-      if (tab[_y - 1][_x] == NULL || tab[_y + 1][_x] == NULL){
+      if (kier == "3"){
          srand(time(NULL));
          los = rand() % 2;
-         if (los == 1)
-            tab[_y - 1][_x] = getRandomLand();
-         else if (los == 2)
-            tab[_y + 1][_x] = getRandomLand();
-         else{
-            tab[_y][_x - 1];
-            goto sprawdzanie;
+         if (siatka[_y - 1][_x] == NULL  && los == 1)  {
+            siatka[_y - 1][_x] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
          }
+         else if (siatka[_y + 1][_x] == NULL && los == 2)
+         {
+            siatka[_y + 1][_x] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
+         }
+         else
+            x--;
       }
-   }
-   if (kier == "4"){
-      if (tab[_y][_x - 1] == NULL || tab[_y][_x + 1] == NULL){
+      if (kier == "4"){
          srand(time(NULL));
          los = rand() % 2;
-         if (los == 1)
-            tab[_y][_x - 1] = getRandomLand();
-         else if (los == 2)
-            tab[_y][_x + 1] = getRandomLand();
-         else{
-            tab[_y + 1][_x];
-            goto sprawdzanie;
+         if (siatka[_y][_x - 1] == NULL && los == 1){
+            siatka[_y][_x - 1] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
          }
+         else if (siatka[_y][_x + 1] == NULL && los == 2){
+            siatka[_y][_x + 1] = getRandomLand();
+            trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
+         }
+         else
+            y++;
       }
-   }
 }
 
 /* deklaracja stałych zawierających szerokość i wysokość okna
@@ -512,7 +522,7 @@ int main() {
 
 
    int y = 8, x = 8, i = 0;          // zmienne przechowujace miejsce poprzedniego elementu     default srodek
-   item* siatka[15][15];
+   //item* siatka[15][15];
 
    std::string opisTrasy = "";
 
@@ -529,8 +539,6 @@ int main() {
 
 
    int zmiennalosowania = 0;
-
-   vector<string>trasa;
 
 
    //int element = rand() % 5 + 1;      //losowanie elementu
@@ -1368,13 +1376,7 @@ live:
    siatka[y][x] = new stop;
    int j = 0;
 
-   /*
-   *
-   *
-   *  Tu wywolaj funkcje
-   *
-   */
-   sprawdz(siatka[8][8]->dest, 8, 8, siatka);
+   sprawdz(siatka[8][8]->dest, 8, 8);
    ///////////////////////////////////////////////////////////////////////////////////////////////
    //                                  ZEROWANIE   X I Y   Z TRASY                              //
    ///////////////////////////////////////////////////////////////////////////////////////////////
