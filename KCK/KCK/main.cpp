@@ -354,11 +354,11 @@ item* getRandomLand(){
 
 ////sprawdzanie elementów obok drogi 
 
-void sprawdz(int kier, int _x, int _y, item *tab[15][15]){
+void sprawdz(string kier, int _x, int _y, item *tab[15][15]){
    tab[8][8];
    int los;
 sprawdzanie:
-   if (kier == 1){
+   if (kier == "1"){
       if (tab[_y - 1][_x] == NULL || tab[_y + 1][_x] == NULL){
          srand(time(NULL));
          los = rand() % 2;
@@ -372,7 +372,7 @@ sprawdzanie:
          }
       }
    }
-   if (kier == 2){
+   if (kier == "2"){
       if (tab[_y][_x - 1] == NULL || tab[_y][_x + 1] == NULL){
          srand(time(NULL));
          los = rand() % 2;
@@ -386,7 +386,7 @@ sprawdzanie:
          }
       }
    }
-   if (kier == 3){
+   if (kier == "3"){
       if (tab[_y - 1][_x] == NULL || tab[_y + 1][_x] == NULL){
          srand(time(NULL));
          los = rand() % 2;
@@ -400,7 +400,7 @@ sprawdzanie:
          }
       }
    }
-   if (kier == 4){
+   if (kier == "4"){
       if (tab[_y][_x - 1] == NULL || tab[_y][_x + 1] == NULL){
          srand(time(NULL));
          los = rand() % 2;
@@ -1374,7 +1374,7 @@ live:
    *  Tu wywolaj funkcje
    *
    */
-
+   sprawdz(siatka[8][8]->dest, 8, 8, siatka);
    ///////////////////////////////////////////////////////////////////////////////////////////////
    //                                  ZEROWANIE   X I Y   Z TRASY                              //
    ///////////////////////////////////////////////////////////////////////////////////////////////
