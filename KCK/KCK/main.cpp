@@ -39,6 +39,10 @@ public:
       dest = _toString;
    }
 
+   string getdest(){
+      return dest;
+   }
+
    ALLEGRO_BITMAP* getBitmap() {
       return bitmap;
    }
@@ -143,7 +147,7 @@ public:
       Gora = g;
       Dol = d;
    }
-   void getvalue(){}
+   //  void getvalue(){}
 };
 
 class Landmark : public item {
@@ -327,8 +331,8 @@ public:
 
 item* getRandomLand(){
    int landki;
-   srand(time(NULL));
-   landki = rand() % 4;
+   //srand(time(NULL));
+   landki = rand() % 5;
    switch (landki) {
    case 0: {
       dDrzewo *d = new dDrzewo();
@@ -357,73 +361,207 @@ item* getRandomLand(){
 
 vector<string>trasa;
 item* siatka[15][15];
-
+/*
 void sprawdz(string kier, int _x, int _y){
-   
-   int los;
-   int x = _x;
-   int y = _y;
-   for (int i = 0; i < 15; i++)
-      if (kier == "1"){
-         srand(time(NULL));
-         los = rand() % 2;
-         if (siatka[_y - 1][_x] == NULL && los == 1){
-            siatka[_y - 1][_x] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
-         }
-         else if (siatka[_y + 1][_x] == NULL && los == 2){
-            siatka[_y + 1][_x] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
-         }
-         else{
-            x++;
-         }
-      }
 
-      else if (kier == "2"){
-         srand(time(NULL));
-         los = rand() % 2;
-         if (siatka[_y][_x - 1] == NULL && los == 1){
-            siatka[_y][_x - 1] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
-         }
-         else if (siatka[_y][_x + 1] == NULL && los == 2){
-            siatka[_y][_x + 1] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
-         }
-         else
-            y--;
+int los;
+int x = _x;
+int y = _y;
+for (int i = 0; i < 15; i++)
+if (kier == "1"){
+srand(time(NULL));
+los = rand() % 2;
+if (siatka[_y - 1][_x] == NULL && los == 1){
+siatka[_y - 1][_x] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
+}
+else if (siatka[_y + 1][_x] == NULL && los == 2){
+siatka[_y + 1][_x] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
+}
+_x++;
 
+}
+
+else if (kier == "2"){
+srand(time(NULL));
+los = rand() % 2;
+if (siatka[_y][_x - 1] == NULL && los == 1){
+siatka[_y][_x - 1] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
+}
+else if (siatka[_y][_x + 1] == NULL && los == 2){
+siatka[_y][_x + 1] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
+}
+_y--;
+
+}
+if (kier == "3"){
+srand(time(NULL));
+los = rand() % 2;
+if (siatka[_y - 1][_x] == NULL  && los == 1)  {
+siatka[_y - 1][_x] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
+}
+else if (siatka[_y + 1][_x] == NULL && los == 2)
+{
+siatka[_y + 1][_x] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
+}
+_x--;
+}
+if (kier == "4"){
+srand(time(NULL));
+los = rand() % 2;
+if (siatka[_y][_x - 1] == NULL && los == 1){
+siatka[_y][_x - 1] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
+}
+else if (siatka[_y][_x + 1] == NULL && los == 2){
+siatka[_y][_x + 1] = getRandomLand();
+trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
+}
+_y++;
+
+}
+kier = siatka[_y][_x]->dest;
+
+}
+*/
+
+void sprawdz(string kier, int _x, int _y) {
+   srand(time(NULL));
+   for (int i = 0; i < 15; i++){
+      //while (siatka[_y][_x]->getvalue() != "Sp") {
+      if (kier == "1") { //kier w prawo
+         /*
+         * Tu masz kier = 1, wiec idzie w prawo, wiec sprawdzasz jaki element i
+         * wstawiasz tu dopisanie do vectora tekstu "ide na wschod po luku" czy cos tam
+         */
+         if (siatka[_y - 1][_x] == NULL) {
+
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y - 1][_x] = getRandomLand();
+            /*
+            * tu wylosowales pierwszy landmark, sprawdzasz jaki i wstawiasz odpowiedni tekst
+            */
+         }
+         if (siatka[_y + 1][_x] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y + 1][_x] = getRandomLand();
+            /*
+            * tu drugi landmark
+            */
+         }
+         if (siatka[_y - 2][_x] == NULL) {
+
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y - 2][_x] = getRandomLand();
+            /*
+            * tu daleki landmark
+            */
+         }
+         if (siatka[_y + 2][_x] == NULL) {
+
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y + 2][_x] = getRandomLand();
+            /*
+            *tu drugi daleki landmark
+            */
+         }
+         _x++;
       }
-      if (kier == "3"){
-         srand(time(NULL));
-         los = rand() % 2;
-         if (siatka[_y - 1][_x] == NULL  && los == 1)  {
-            siatka[_y - 1][_x] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
+      else if (kier == "2") { //kier w gore
+         if (siatka[_y][_x - 1] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x - 1] = getRandomLand();
          }
-         else if (siatka[_y + 1][_x] == NULL && los == 2)
-         {
-            siatka[_y + 1][_x] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
+         if (siatka[_y][_x + 1] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x + 1] = getRandomLand();
          }
-         else
-            x--;
+         if (siatka[_y][_x + 2] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x + 2] = getRandomLand();
+         }
+         if (siatka[_y][_x - 2] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x - 2] = getRandomLand();
+         }
+         _y--;
       }
-      if (kier == "4"){
-         srand(time(NULL));
-         los = rand() % 2;
-         if (siatka[_y][_x - 1] == NULL && los == 1){
-            siatka[_y][_x - 1] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
+      else if (kier == "3") { //kier w lewo
+         if (siatka[_y - 1][_x] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y - 1][_x] = getRandomLand();
          }
-         else if (siatka[_y][_x + 1] == NULL && los == 2){
-            siatka[_y][_x + 1] = getRandomLand();
-            trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
+         if (siatka[_y + 1][_x] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y + 1][_x] = getRandomLand();
          }
-         else
-            y++;
+         if (siatka[_y + 2][_x] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y + 2][_x] = getRandomLand();
+         }
+         if (siatka[_y - 2][_x] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y - 2][_x] = getRandomLand();
+         }
+         _x--;
       }
+      else if (kier == "4") { //kier w dol
+         if (siatka[_y][_x - 1] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x - 1] = getRandomLand();
+         }
+         if (siatka[_y][_x + 1] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x + 1] = getRandomLand();
+         }
+         if (siatka[_y][_x + 2] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x + 2] = getRandomLand();
+         }
+         if (siatka[_y][_x - 2] == NULL) {
+            //srand(time(NULL));
+            int los = rand() % 4;
+            if (los >= 1) // wstawia element
+               siatka[_y][_x - 2] = getRandomLand();
+         }
+         _y++;
+      }
+      kier = siatka[_y][_x]->getdest();
+   }
+
+
 }
 
 /* deklaracja stałych zawierających szerokość i wysokość okna
@@ -1376,7 +1514,7 @@ live:
    siatka[y][x] = new stop;
    int j = 0;
 
-   sprawdz(siatka[8][8]->dest, 8, 8);
+   sprawdz(siatka[8][8]->getdest(), 8, 8);
    ///////////////////////////////////////////////////////////////////////////////////////////////
    //                                  ZEROWANIE   X I Y   Z TRASY                              //
    ///////////////////////////////////////////////////////////////////////////////////////////////
