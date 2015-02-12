@@ -304,11 +304,12 @@ public:
 
 class FileHandler {
 public:
-   void static write(string contents, string filename) {
+   void static write(vector<string> trasa, string filename) {
       ofstream file;
 
       file.open(filename);
-      file << contents;
+      for (int i = 0; i < trasa.size(); i++)
+         file << trasa[i] << "\n";
       file.close();
    };
    string static read(string filename) {
@@ -1568,7 +1569,7 @@ live:
 
    cout << opisTrasy;
    trasa[trasa.size() - 1] = "STOP";
-   FileHandler::write(opisTrasy, "opisTrasy.txt");
+   FileHandler::write(trasa, "opisTrasy.txt");
 
    bool done = false;
    ALLEGRO_BITMAP * grassBitmap = NULL;
