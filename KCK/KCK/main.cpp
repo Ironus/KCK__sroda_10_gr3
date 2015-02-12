@@ -361,152 +361,92 @@ item* getRandomLand(){
 
 vector<string>trasa;
 item* siatka[15][15];
-/*
-void sprawdz(string kier, int _x, int _y){
-
-int los;
-int x = _x;
-int y = _y;
-for (int i = 0; i < 15; i++)
-if (kier == "1"){
-srand(time(NULL));
-los = rand() % 2;
-if (siatka[_y - 1][_x] == NULL && los == 1){
-siatka[_y - 1][_x] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
-}
-else if (siatka[_y + 1][_x] == NULL && los == 2){
-siatka[_y + 1][_x] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
-}
-_x++;
-
-}
-
-else if (kier == "2"){
-srand(time(NULL));
-los = rand() % 2;
-if (siatka[_y][_x - 1] == NULL && los == 1){
-siatka[_y][_x - 1] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
-}
-else if (siatka[_y][_x + 1] == NULL && los == 2){
-siatka[_y][_x + 1] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
-}
-_y--;
-
-}
-if (kier == "3"){
-srand(time(NULL));
-los = rand() % 2;
-if (siatka[_y - 1][_x] == NULL  && los == 1)  {
-siatka[_y - 1][_x] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y - 1][_x]->nazwa + "na polnocy");
-}
-else if (siatka[_y + 1][_x] == NULL && los == 2)
-{
-siatka[_y + 1][_x] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y + 1][_x]->nazwa + "na poludniu");
-}
-_x--;
-}
-if (kier == "4"){
-srand(time(NULL));
-los = rand() % 2;
-if (siatka[_y][_x - 1] == NULL && los == 1){
-siatka[_y][_x - 1] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y][_x - 1]->nazwa + "na zachodzie");
-}
-else if (siatka[_y][_x + 1] == NULL && los == 2){
-siatka[_y][_x + 1] = getRandomLand();
-trasa.push_back("Widze" + siatka[_y][_x + 1]->nazwa + "na wschodzie");
-}
-_y++;
-
-}
-kier = siatka[_y][_x]->dest;
-
-}
-*/
 
 string coToZaElement(string kierunek, int _y, int _x){
    string name = siatka[_y][_x]->ToString;
+   
+   ostringstream stringX;
+   stringX << _x;
+   string strX = stringX.str();
+   ostringstream stringY;
+   stringY << _y;
+   string strY = stringY.str();
+
    //proste
    if (name == "D1" && kierunek == "2"){
-      return "Ide na polnoc";
+      return strX + " " + strY + "Ide na polnoc";
    }
    else if (name == "D1" && kierunek == "4"){
-      return "Ide na poludnie";
+      return strX + " " + strY + "Ide na poludnie";
    }
    else if (name == "D2" && kierunek == "1"){
-      return "Ide na wschod";
+      return strX + " " + strY + "Ide na wschod";
    }
    else if (name == "D2" && kierunek == "3"){
-      return "Ide na zachod";
+      return strX + " " + strY + "Ide na zachod";
    }
    //skrzyzowanie
    else if (name == "cr" && kierunek == "1"){
-      return "Na skrzyzowaniu ide na wschod";
+      return strX + " " + strY + "Na skrzyzowaniu ide na wschod";
    }
    else if (name == "cr" && kierunek == "2"){
-      return "Na skrzyzowaniu ide na polnoc";
+      return strX + " " + strY + "Na skrzyzowaniu ide na polnoc";
    }
    else if (name == "cr" && kierunek == "3"){
-      return "Na skrzyzowaniu ide na zachod";
+      return strX + " " + strY + "Na skrzyzowaniu ide na zachod";
    }
    else if (name == "cr" && kierunek == "4"){
-      return "Na skrzyzowaniu ide na poludnie";
+      return strX + " " + strY + "Na skrzyzowaniu ide na poludnie";
    }
    //luk lagodny
+   else if (name == "z1" && kierunek == "4"){
+      return strX + " " + strY + "Skrecam lagodnie z polnocy na zachod";
+   }
    else if (name == "z1" && kierunek == "3"){
-      return "Skrecam lagodnie z polnocy na zachod";
-   }
-   else if (name == "z1" && kierunek == "2"){
-      return "Skrecam lagodnie z zachodu na polnoc";
-   }
-   else if (name == "z2" && kierunek == "1"){
-      return "Skrecam lagodnie z polnocy na wschod";
+      return strX + " " + strY + "Skrecam lagodnie z zachodu na polnoc";
    }
    else if (name == "z2" && kierunek == "2"){
-      return "Skrecam lagodnie z wschodu na polnoc";
+      return strX + " " + strY + "Skrecam lagodnie z polnocy na wschod";
    }
-   else if (name == "z3" && kierunek == "3"){
-      return "Skrecam lagodnie z poludnia na zachod";
+   else if (name == "z2" && kierunek == "3"){
+      return strX + " " + strY + "Skrecam lagodnie z wschodu na polnoc";
    }
    else if (name == "z3" && kierunek == "4"){
-      return "Skrecam lagodnie z zachodu na poludnie";
+      return strX + " " + strY + "Skrecam lagodnie z poludnia na zachod";
+   }
+   else if (name == "z3" && kierunek == "1"){
+      return strX + " " + strY + "Skrecam lagodnie z zachodu na poludnie";
+   }
+   else if (name == "z4" && kierunek == "2"){
+      return strX + " " + strY + "Skrecam lagodnie z poludnia na wschod";
    }
    else if (name == "z4" && kierunek == "1"){
-      return "Skrecam lagodnie z poludnia na wschod";
-   }
-   else if (name == "z4" && kierunek == "4"){
-      return "Skrecam lagodnie z wschodu na poludnie";
+      return strX + " " + strY + "Skrecam lagodnie z wschodu na poludnie";
    }
    //luk ostry
+   else if (name == "z11" && kierunek == "4"){
+      return strX + " " + strY + "Skrecam ostro z polnocy na zachod";
+   }
    else if (name == "z11" && kierunek == "3"){
-      return "Skrecam ostro z polnocy na zachod";
-   }
-   else if (name == "z11" && kierunek == "2"){
-      return "Skrecam ostro z zachodu na polnoc";
-   }
-   else if (name == "z21" && kierunek == "1"){
-      return "Skrecam ostro z polnocy na wschod";
+      return strX + " " + strY + "Skrecam ostro z zachodu na polnoc";
    }
    else if (name == "z21" && kierunek == "2"){
-      return "Skrecam ostro z wschodu na polnoc";
+      return strX + " " + strY + "Skrecam ostro z polnocy na wschod";
    }
-   else if (name == "z31" && kierunek == "3"){
-      return "Skrecam ostro z poludnia na zachod";
+   else if (name == "z21" && kierunek == "3"){
+      return strX + " " + strY + "Skrecam ostro z wschodu na polnoc";
    }
    else if (name == "z31" && kierunek == "4"){
-      return "Skrecam ostro z zachodu na poludnie";
+      return strX + " " + strY + "Skrecam ostro z poludnia na zachod";
+   }
+   else if (name == "z31" && kierunek == "1"){
+      return strX + " " + strY + "Skrecam ostro z zachodu na poludnie";
+   }
+   else if (name == "z41" && kierunek == "2"){
+      return strX + " " + strY + "Skrecam ostro z poludnia na wschod";
    }
    else if (name == "z41" && kierunek == "1"){
-      return "Skrecam ostro z poludnia na wschod";
-   }
-   else if (name == "z41" && kierunek == "4"){
-      return "Skrecam ostro z wschodu na poludnie";
+      return strX + " " + strY + "Skrecam ostro z wschodu na poludnie";
    }
    else
       return " ";
@@ -514,6 +454,7 @@ string coToZaElement(string kierunek, int _y, int _x){
 
 void sprawdz(string kier, int _x, int _y) {
    trasa.clear();
+   trasa.resize(0);
    srand(time(NULL));
    for (int i = 0; i < 15; i++){
       //while (siatka[_y][_x]->getvalue() != "Sp") {
@@ -681,7 +622,7 @@ void sprawdz(string kier, int _x, int _y) {
 *  a wieloczłonowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 715, SCREEN_H = 450, MAP_SIDE = 450;
+const short SCREEN_W = 800, SCREEN_H = 450, MAP_SIDE = 450;
 
 /* deklaracja zmiennej przetrzymującej kod błędu
 *  <>0 - błąd
@@ -722,7 +663,7 @@ int graphic_initialize() {
    event_queue = al_create_event_queue();
    al_register_event_source(event_queue, al_get_keyboard_event_source());
    // załadowanie czcionki
-   font = al_load_font("fonts/arial.ttf", 16, 0);
+   font = al_load_font("fonts/arial.ttf", 12, 0);
    // sprawdzenie czy załadowana poprawnie
    if (!font) {
       al_show_native_message_box(NULL, NULL, "Font error", "błąd czcionki", NULL, NULL);
@@ -1672,7 +1613,7 @@ live:
 
 
       int round = 0;
-      int jump = 15;
+      int jump = 11;
       for (int k = 0; k < trasa.size(); k++) {
          if (trasa[k] != " ") {
             al_draw_textf(font, al_map_rgb(0, 0, 0), MAP_SIDE + 10, 10 + round * jump, 0, "%s", trasa[k].c_str());
