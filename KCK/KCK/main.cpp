@@ -430,131 +430,242 @@ kier = siatka[_y][_x]->dest;
 }
 */
 
+string coToZaElement(string kierunek, int _y, int _x){
+   string name = siatka[_y][_x]->ToString;
+   //proste
+   if (name == "D1" && kierunek == "2"){
+      return "Ide na polnoc";
+   }
+   else if (name == "D1" && kierunek == "4"){
+      return "Ide na poludnie";
+   }
+   else if (name == "D2" && kierunek == "1"){
+      return "Ide na wschod";
+   }
+   else if (name == "D2" && kierunek == "3"){
+      return "Ide na zachod";
+   }
+   //skrzyzowanie
+   else if (name == "cr" && kierunek == "1"){
+      return "Na skrzyzowaniu ide na wschod";
+   }
+   else if (name == "cr" && kierunek == "2"){
+      return "Na skrzyzowaniu ide na polnoc";
+   }
+   else if (name == "cr" && kierunek == "3"){
+      return "Na skrzyzowaniu ide na zachod";
+   }
+   else if (name == "cr" && kierunek == "4"){
+      return "Na skrzyzowaniu ide na poludnie";
+   }
+   //luk lagodny
+   else if (name == "z1" && kierunek == "3"){
+      return "Skrecam lagodnie z polnocy na zachod";
+   }
+   else if (name == "z1" && kierunek == "2"){
+      return "Skrecam lagodnie z zachodu na polnoc";
+   }
+   else if (name == "z2" && kierunek == "1"){
+      return "Skrecam lagodnie z polnocy na wschod";
+   }
+   else if (name == "z2" && kierunek == "2"){
+      return "Skrecam lagodnie z wschodu na polnoc";
+   }
+   else if (name == "z3" && kierunek == "3"){
+      return "Skrecam lagodnie z poludnia na zachod";
+   }
+   else if (name == "z3" && kierunek == "4"){
+      return "Skrecam lagodnie z zachodu na poludnie";
+   }
+   else if (name == "z4" && kierunek == "1"){
+      return "Skrecam lagodnie z poludnia na wschod";
+   }
+   else if (name == "z4" && kierunek == "4"){
+      return "Skrecam lagodnie z wschodu na poludnie";
+   }
+   //luk ostry
+   else if (name == "z11" && kierunek == "3"){
+      return "Skrecam ostro z polnocy na zachod";
+   }
+   else if (name == "z11" && kierunek == "2"){
+      return "Skrecam ostro z zachodu na polnoc";
+   }
+   else if (name == "z21" && kierunek == "1"){
+      return "Skrecam ostro z polnocy na wschod";
+   }
+   else if (name == "z21" && kierunek == "2"){
+      return "Skrecam ostro z wschodu na polnoc";
+   }
+   else if (name == "z31" && kierunek == "3"){
+      return "Skrecam ostro z poludnia na zachod";
+   }
+   else if (name == "z31" && kierunek == "4"){
+      return "Skrecam ostro z zachodu na poludnie";
+   }
+   else if (name == "z41" && kierunek == "1"){
+      return "Skrecam ostro z poludnia na wschod";
+   }
+   else if (name == "z41" && kierunek == "4"){
+      return "Skrecam ostro z wschodu na poludnie";
+   }
+   else
+      return " ";
+}
+
 void sprawdz(string kier, int _x, int _y) {
+   trasa.clear();
    srand(time(NULL));
    for (int i = 0; i < 15; i++){
       //while (siatka[_y][_x]->getvalue() != "Sp") {
       if (kier == "1") { //kier w prawo
-         /*
-         * Tu masz kier = 1, wiec idzie w prawo, wiec sprawdzasz jaki element i
-         * wstawiasz tu dopisanie do vectora tekstu "ide na wschod po luku" czy cos tam
-         */
+
+         trasa.push_back(coToZaElement(kier, _y, _x + 1));
+
          if (siatka[_y - 1][_x] == NULL) {
 
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y - 1][_x] = getRandomLand();
-            /*
-            * tu wylosowales pierwszy landmark, sprawdzasz jaki i wstawiasz odpowiedni tekst
-            */
+               trasa.push_back("Widze blisko " + siatka[_y - 1][_x]->nazwa + " na polnocy");
+            }
          }
          if (siatka[_y + 1][_x] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y + 1][_x] = getRandomLand();
-            /*
-            * tu drugi landmark
-            */
+               trasa.push_back("Widze blisko " + siatka[_y + 1][_x]->nazwa + " na poludniu");
+            }
          }
          if (siatka[_y - 2][_x] == NULL) {
 
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y - 2][_x] = getRandomLand();
-            /*
-            * tu daleki landmark
-            */
+               trasa.push_back("Widze daleko " + siatka[_y - 2][_x]->nazwa + " na polnocy");
+            }
          }
          if (siatka[_y + 2][_x] == NULL) {
 
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y + 2][_x] = getRandomLand();
-            /*
-            *tu drugi daleki landmark
-            */
+               trasa.push_back("Widze daleko " + siatka[_y + 2][_x]->nazwa + " na poludniu");
+            }
          }
          _x++;
       }
       else if (kier == "2") { //kier w gore
+
+         trasa.push_back(coToZaElement(kier, _y - 1, _x));
+
          if (siatka[_y][_x - 1] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x - 1] = getRandomLand();
+               trasa.push_back("Widze blisko " + siatka[_y][_x - 1]->nazwa + " na zachodzie");
+            }
          }
          if (siatka[_y][_x + 1] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x + 1] = getRandomLand();
+               trasa.push_back("Widze blisko " + siatka[_y][_x + 1]->nazwa + " na wschodzie");
+            }
          }
          if (siatka[_y][_x + 2] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x + 2] = getRandomLand();
+               trasa.push_back("Widze daleko " + siatka[_y][_x + 2]->nazwa + " na wschodzie");
+            }
          }
          if (siatka[_y][_x - 2] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x - 2] = getRandomLand();
+               trasa.push_back("Widze daleko " + siatka[_y][_x - 2]->nazwa + " na zachodzie");
+            }
          }
          _y--;
       }
       else if (kier == "3") { //kier w lewo
+
+         trasa.push_back(coToZaElement(kier, _y, _x - 1));
+
          if (siatka[_y - 1][_x] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y - 1][_x] = getRandomLand();
+               trasa.push_back("Widze blisko " + siatka[_y - 1][_x]->nazwa + " na polnocy");
+            }
          }
          if (siatka[_y + 1][_x] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y + 1][_x] = getRandomLand();
+               trasa.push_back("Widze blisko " + siatka[_y + 1][_x]->nazwa + " na poludniu");
+            }
          }
          if (siatka[_y + 2][_x] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y + 2][_x] = getRandomLand();
+               trasa.push_back("Widze daleko " + siatka[_y + 2][_x]->nazwa + " na poludniu");
+            }
          }
          if (siatka[_y - 2][_x] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y - 2][_x] = getRandomLand();
+               trasa.push_back("Widze daleko " + siatka[_y - 2][_x]->nazwa + " na polnocy");
+            }
          }
          _x--;
       }
       else if (kier == "4") { //kier w dol
+
+         trasa.push_back(coToZaElement(kier, _y + 1, _x));
+
          if (siatka[_y][_x - 1] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x - 1] = getRandomLand();
+               trasa.push_back("Widze blisko " + siatka[_y][_x - 1]->nazwa + " na zachodzie");
+            }
          }
          if (siatka[_y][_x + 1] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x + 1] = getRandomLand();
+               trasa.push_back("Widze blisko " + siatka[_y][_x + 1]->nazwa + " na wschodzie");
+            }
          }
          if (siatka[_y][_x + 2] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x + 2] = getRandomLand();
+               trasa.push_back("Widze daleko " + siatka[_y][_x + 2]->nazwa + " na wschodzie");
+            }
          }
          if (siatka[_y][_x - 2] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
-            if (los >= 1) // wstawia element
+            if (los >= 1){ // wstawia element
                siatka[_y][_x - 2] = getRandomLand();
+               trasa.push_back("Widze daleko " + siatka[_y][_x - 2]->nazwa + " na zachodzie");
+            }
          }
          _y++;
       }
@@ -563,7 +674,6 @@ void sprawdz(string kier, int _x, int _y) {
 
 
 }
-
 /* deklaracja stałych zawierających szerokość i wysokość okna
 *  width = 2 * 300px - po 300px na agenta + 10 na przerwe między ich mapami
 *  height = 500px - 300 na wysokość mapki + 200 na log tekstowy z trasą
@@ -1564,8 +1674,10 @@ live:
       int round = 0;
       int jump = 15;
       for (int k = 0; k < trasa.size(); k++) {
-         al_draw_textf(font, al_map_rgb(0, 0, 0), MAP_SIDE + 10, 10 + round * jump, 0, "%s", trasa[k].c_str());
-         round++;
+         if (trasa[k] != " ") {
+            al_draw_textf(font, al_map_rgb(0, 0, 0), MAP_SIDE + 10, 10 + round * jump, 0, "%s", trasa[k].c_str());
+            round++;
+         }
       }
 
       al_flip_display();
