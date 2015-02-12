@@ -402,16 +402,16 @@ string coToZaElement(string kierunek, int _y, int _x){
    else if (name == "z1" && kierunek == "4"){
       return strX + " " + strY + "Skrecam lagodnie z polnocy na zachod";
    }
-   else if (name == "z1" && kierunek == "3"){
+   else if (name == "z1" && kierunek == "1"){
       return strX + " " + strY + "Skrecam lagodnie z zachodu na polnoc";
    }
-   else if (name == "z2" && kierunek == "2"){
+   else if (name == "z2" && kierunek == "4"){
       return strX + " " + strY + "Skrecam lagodnie z polnocy na wschod";
    }
    else if (name == "z2" && kierunek == "3"){
       return strX + " " + strY + "Skrecam lagodnie z wschodu na polnoc";
    }
-   else if (name == "z3" && kierunek == "4"){
+   else if (name == "z3" && kierunek == "2"){
       return strX + " " + strY + "Skrecam lagodnie z poludnia na zachod";
    }
    else if (name == "z3" && kierunek == "1"){
@@ -420,23 +420,23 @@ string coToZaElement(string kierunek, int _y, int _x){
    else if (name == "z4" && kierunek == "2"){
       return strX + " " + strY + "Skrecam lagodnie z poludnia na wschod";
    }
-   else if (name == "z4" && kierunek == "1"){
+   else if (name == "z4" && kierunek == "3"){
       return strX + " " + strY + "Skrecam lagodnie z wschodu na poludnie";
    }
    //luk ostry
    else if (name == "z11" && kierunek == "4"){
       return strX + " " + strY + "Skrecam ostro z polnocy na zachod";
    }
-   else if (name == "z11" && kierunek == "3"){
+   else if (name == "z11" && kierunek == "1"){
       return strX + " " + strY + "Skrecam ostro z zachodu na polnoc";
    }
-   else if (name == "z21" && kierunek == "2"){
+   else if (name == "z21" && kierunek == "4"){
       return strX + " " + strY + "Skrecam ostro z polnocy na wschod";
    }
    else if (name == "z21" && kierunek == "3"){
       return strX + " " + strY + "Skrecam ostro z wschodu na polnoc";
    }
-   else if (name == "z31" && kierunek == "4"){
+   else if (name == "z31" && kierunek == "2"){
       return strX + " " + strY + "Skrecam ostro z poludnia na zachod";
    }
    else if (name == "z31" && kierunek == "1"){
@@ -445,7 +445,7 @@ string coToZaElement(string kierunek, int _y, int _x){
    else if (name == "z41" && kierunek == "2"){
       return strX + " " + strY + "Skrecam ostro z poludnia na wschod";
    }
-   else if (name == "z41" && kierunek == "1"){
+   else if (name == "z41" && kierunek == "3"){
       return strX + " " + strY + "Skrecam ostro z wschodu na poludnie";
    }
    else
