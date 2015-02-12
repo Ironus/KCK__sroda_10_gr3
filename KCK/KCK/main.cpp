@@ -364,88 +364,81 @@ item* siatka[15][15];
 
 string coToZaElement(string kierunek, int _y, int _x){
    string name = siatka[_y][_x]->ToString;
-   
-   ostringstream stringX;
-   stringX << _x;
-   string strX = stringX.str();
-   ostringstream stringY;
-   stringY << _y;
-   string strY = stringY.str();
 
    //proste
    if (name == "D1" && kierunek == "2"){
-      return strX + " " + strY + "Ide na polnoc";
+      return "Ide na polnoc";
    }
    else if (name == "D1" && kierunek == "4"){
-      return strX + " " + strY + "Ide na poludnie";
+      return "Ide na poludnie";
    }
    else if (name == "D2" && kierunek == "1"){
-      return strX + " " + strY + "Ide na wschod";
+      return "Ide na wschod";
    }
    else if (name == "D2" && kierunek == "3"){
-      return strX + " " + strY + "Ide na zachod";
+      return "Ide na zachod";
    }
    //skrzyzowanie
    else if (name == "cr"){
       kierunek = siatka[_y][_x]->getdest();
       if (kierunek == "1")
-         return strX + " " + strY + "Na skrzyzowaniu ide na wschod";
+         return "Na skrzyzowaniu ide na wschod";
       else if (kierunek == "2")
-         return strX + " " + strY + "Na skrzyzowaniu ide na polnoc";
+         return "Na skrzyzowaniu ide na polnoc";
       else if (kierunek == "3")
-         return strX + " " + strY + "Na skrzyzowaniu ide na zachod";
+         return "Na skrzyzowaniu ide na zachod";
       else if (kierunek == "4")
-         return strX + " " + strY + "Na skrzyzowaniu ide na poludnie";
+         return "Na skrzyzowaniu ide na poludnie";
    }
    //luk lagodny
    else if (name == "z1" && kierunek == "4"){
-      return strX + " " + strY + "Skrecam lagodnie z polnocy na zachod";
+      return "Skrecam lagodnie z polnocy na zachod";
    }
    else if (name == "z1" && kierunek == "1"){
-      return strX + " " + strY + "Skrecam lagodnie z zachodu na polnoc";
+      return "Skrecam lagodnie z zachodu na polnoc";
    }
    else if (name == "z2" && kierunek == "4"){
-      return strX + " " + strY + "Skrecam lagodnie z polnocy na wschod";
+      return "Skrecam lagodnie z polnocy na wschod";
    }
    else if (name == "z2" && kierunek == "3"){
-      return strX + " " + strY + "Skrecam lagodnie z wschodu na polnoc";
+      return "Skrecam lagodnie z wschodu na polnoc";
    }
    else if (name == "z3" && kierunek == "2"){
-      return strX + " " + strY + "Skrecam lagodnie z poludnia na zachod";
+      return "Skrecam lagodnie z poludnia na zachod";
    }
    else if (name == "z3" && kierunek == "1"){
-      return strX + " " + strY + "Skrecam lagodnie z zachodu na poludnie";
+      return "Skrecam lagodnie z zachodu na poludnie";
    }
    else if (name == "z4" && kierunek == "2"){
-      return strX + " " + strY + "Skrecam lagodnie z poludnia na wschod";
+      return "Skrecam lagodnie z poludnia na wschod";
    }
    else if (name == "z4" && kierunek == "3"){
-      return strX + " " + strY + "Skrecam lagodnie z wschodu na poludnie";
+      return "Skrecam lagodnie z wschodu na poludnie";
    }
    //luk ostry
    else if (name == "z11" && kierunek == "4"){
-      return strX + " " + strY + "Skrecam ostro z polnocy na zachod";
+      return "Skrecam ostro z polnocy na zachod";
    }
    else if (name == "z11" && kierunek == "1"){
-      return strX + " " + strY + "Skrecam ostro z zachodu na polnoc";
+      return "Skrecam ostro z zachodu na polnoc";
    }
    else if (name == "z21" && kierunek == "4"){
-      return strX + " " + strY + "Skrecam ostro z polnocy na wschod";
+      return "Skrecam ostro z polnocy na wschod";
    }
    else if (name == "z21" && kierunek == "3"){
-      return strX + " " + strY + "Skrecam ostro z wschodu na polnoc";
+      return "Skrecam ostro z wschodu na polnoc";
    }
    else if (name == "z31" && kierunek == "2"){
-      return strX + " " + strY + "Skrecam ostro z poludnia na zachod";
+      return "Skrecam ostro z poludnia na zachod";
    }
    else if (name == "z31" && kierunek == "1"){
-      return strX + " " + strY + "Skrecam ostro z zachodu na poludnie";
+      return "Skrecam ostro z zachodu na poludnie";
    }
    else if (name == "z41" && kierunek == "2"){
-      return strX + " " + strY + "Skrecam ostro z poludnia na wschod";
+      return "Skrecam ostro z poludnia na wschod";
    }
    else if (name == "z41" && kierunek == "3"){
-      return strX + " " + strY + "Skrecam ostro z wschodu na poludnie";
+      return "Skrecam ostro z wschodu na poludnie";
    }
    else
       return " ";
@@ -620,7 +613,7 @@ void sprawdz(string kier, int _x, int _y) {
 *  a wieloczłonowe nazwy zmiennych oddzielam '_'
 *  by Ironus
 */
-const short SCREEN_W = 800, SCREEN_H = 450, MAP_SIDE = 450;
+const short SCREEN_W = 800, SCREEN_H = 550, MAP_SIDE = 450;
 
 /* deklaracja zmiennej przetrzymującej kod błędu
 *  <>0 - błąd
@@ -661,7 +654,7 @@ int graphic_initialize() {
    event_queue = al_create_event_queue();
    al_register_event_source(event_queue, al_get_keyboard_event_source());
    // załadowanie czcionki
-   font = al_load_font("fonts/arial.ttf", 12, 0);
+   font = al_load_font("fonts/arial.ttf", 13, 0);
    // sprawdzenie czy załadowana poprawnie
    if (!font) {
       al_show_native_message_box(NULL, NULL, "Font error", "błąd czcionki", NULL, NULL);
@@ -691,9 +684,10 @@ int main() {
    //wywołanie inicjalizacji silnika graficznego
    graphic_initialize();
    // czyszczenie tła do koloru magenty(255,0,255) :3
-   al_clear_to_color(al_map_rgb(255, 0, 255));
+   al_clear_to_color(al_map_rgb(255, 255, 255));
    // rysowanie linii oddzielającej mapke od logow
-   al_draw_line(MAP_SIDE, 0, MAP_SIDE, MAP_SIDE, al_map_rgb(128, 128, 128), 10);
+   al_draw_line(MAP_SIDE, 0, MAP_SIDE, SCREEN_H, al_map_rgb(128, 128, 128), 10);
+   al_draw_filled_rectangle(0, 0, MAP_SIDE, SCREEN_H, al_map_rgb(255, 255, 255));
    // rysowanie białego tła pod loga
    al_draw_filled_rectangle(MAP_SIDE + 4, 0, SCREEN_W, SCREEN_H, al_map_rgb(255, 255, 255));
 
@@ -1611,7 +1605,7 @@ live:
 
 
       int round = 0;
-      int jump = 11;
+      int jump = 12;
       for (int k = 0; k < trasa.size(); k++) {
          if (trasa[k] != " ") {
             al_draw_textf(font, al_map_rgb(0, 0, 0), MAP_SIDE + 10, 10 + round * jump, 0, "%s", trasa[k].c_str());
