@@ -451,8 +451,6 @@ void sprawdz(string kier, int _x, int _y) {
    for (int i = 0; i < 15; i++){
       if (kier == "1") { //kier w prawo
 
-         trasa.push_back(coToZaElement(kier, _y, _x + 1));
-
          if (siatka[_y - 1][_x] == NULL) {
 
             int los = rand() % 4;
@@ -485,12 +483,11 @@ void sprawdz(string kier, int _x, int _y) {
                trasa.push_back("Widze daleko " + siatka[_y + 2][_x]->nazwa + " na poludniu");
             }
          }
+         trasa.push_back(coToZaElement(kier, _y, _x + 1));
          _x++;
       }
       else if (kier == "2") { //kier w gore
 
-         trasa.push_back(coToZaElement(kier, _y - 1, _x));
-
          if (siatka[_y][_x - 1] == NULL) {
             //srand(time(NULL));
             int los = rand() % 4;
@@ -523,11 +520,10 @@ void sprawdz(string kier, int _x, int _y) {
                trasa.push_back("Widze daleko " + siatka[_y][_x - 2]->nazwa + " na zachodzie");
             }
          }
+         trasa.push_back(coToZaElement(kier, _y - 1, _x));
          _y--;
       }
       else if (kier == "3") { //kier w lewo
-
-         trasa.push_back(coToZaElement(kier, _y, _x - 1));
 
          if (siatka[_y - 1][_x] == NULL) {
             //srand(time(NULL));
@@ -561,11 +557,10 @@ void sprawdz(string kier, int _x, int _y) {
                trasa.push_back("Widze daleko " + siatka[_y - 2][_x]->nazwa + " na polnocy");
             }
          }
+         trasa.push_back(coToZaElement(kier, _y, _x - 1));
          _x--;
       }
       else if (kier == "4") { //kier w dol
-
-         trasa.push_back(coToZaElement(kier, _y + 1, _x));
 
          if (siatka[_y][_x - 1] == NULL) {
             //srand(time(NULL));
@@ -599,6 +594,7 @@ void sprawdz(string kier, int _x, int _y) {
                trasa.push_back("Widze daleko " + siatka[_y][_x - 2]->nazwa + " na zachodzie");
             }
          }
+         trasa.push_back(coToZaElement(kier, _y + 1, _x));
          _y++;
       }
       kier = siatka[_y][_x]->getdest();
