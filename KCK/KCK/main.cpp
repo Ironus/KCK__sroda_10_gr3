@@ -386,17 +386,16 @@ string coToZaElement(string kierunek, int _y, int _x){
       return strX + " " + strY + "Ide na zachod";
    }
    //skrzyzowanie
-   else if (name == "cr" && kierunek == "1"){
-      return strX + " " + strY + "Na skrzyzowaniu ide na wschod";
-   }
-   else if (name == "cr" && kierunek == "2"){
-      return strX + " " + strY + "Na skrzyzowaniu ide na polnoc";
-   }
-   else if (name == "cr" && kierunek == "3"){
-      return strX + " " + strY + "Na skrzyzowaniu ide na zachod";
-   }
-   else if (name == "cr" && kierunek == "4"){
-      return strX + " " + strY + "Na skrzyzowaniu ide na poludnie";
+   else if (name == "cr"){
+      kierunek = siatka[_y][_x]->getdest();
+      if (kierunek == "1")
+         return strX + " " + strY + "Na skrzyzowaniu ide na wschod";
+      else if (kierunek == "2")
+         return strX + " " + strY + "Na skrzyzowaniu ide na polnoc";
+      else if (kierunek == "3")
+         return strX + " " + strY + "Na skrzyzowaniu ide na zachod";
+      else if (kierunek == "4")
+         return strX + " " + strY + "Na skrzyzowaniu ide na poludnie";
    }
    //luk lagodny
    else if (name == "z1" && kierunek == "4"){
@@ -457,7 +456,6 @@ void sprawdz(string kier, int _x, int _y) {
    trasa.resize(0);
    srand(time(NULL));
    for (int i = 0; i < 15; i++){
-      //while (siatka[_y][_x]->getvalue() != "Sp") {
       if (kier == "1") { //kier w prawo
 
          trasa.push_back(coToZaElement(kier, _y, _x + 1));
