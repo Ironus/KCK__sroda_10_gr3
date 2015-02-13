@@ -234,6 +234,249 @@ public:
    }
 };
 
+class BobBudowniczy {
+public:
+	item* siatka;
+	int x, y;
+	
+	BobBudowniczy(item* siatka)
+	{
+		this->siatka = siatka;
+		this->zmienPozycje(8, 8);
+	}
+	
+	// Zwraca mape po zbudowaniu jej
+	item* oddajMape()
+	{
+		return this->siatka;
+	}
+	
+	// Ogarnia znaczenie komendy i wczytuje do mapy odpowiedni obiekt
+	void ogarnij(string komenda)
+	{
+		// Rozpoznanie landmarku
+		if (this->zawiera('Widze', komenda))
+		{
+			// Trzeba wiedziec gdzie wrocic...
+			int x, y;
+			x = this->x;
+			y = this->y;
+			
+			// Ruszamy sie w kierunku landmarku
+			if (this->zawiera('poludniu', komenda))
+			{
+				this->naPoludnie();
+				
+				if (this->zawiera('daleko', komenda))
+				{
+					this->naPoludnie();
+				}
+			}
+			else if (this->zawiera('polnocy', komenda))
+			{
+				this->naPolnoc();
+				
+				if (this->zawiera('daleko', komenda))
+				{
+					this->naPolnoc();
+				}
+			}
+			else if (this->zawiera('wschodzie', komenda))
+			{
+				this->naWschod();
+				
+				if (this->zawiera('daleko', komenda))
+				{
+					this->naWschod();
+				}
+			}
+			else if (this->zawiera('zachodzie', komenda))
+			{
+				this->naZachod();
+				
+				if (this->zawiera('daleko', komenda))
+				{
+					this->naZachod();
+				}
+			}
+			
+			// Dobór landmarku
+			if (this->zawiera('male drzewo', komenda))
+			{
+				this->postawTutaj(new mDrzewo());
+			} 
+			else if (this->zawiera('duze drzewo', komenda))
+			{
+				this->postawTutaj(new dDrzewo());
+			}
+			else if (this->zawiera('twardy kamien', komenda))
+			{
+				this->postawTutaj(new Kamien());
+			}
+			else if (this->zawiera('zielony krzak', komenda))
+			{
+				this->postawTutaj(new Krzak());
+			}
+			else if (this->zawiera('rodzinny dom', komenda))
+			{
+				this->postawTutaj(new Dom());
+			}
+			
+			// Powrot gdzie bylismy, landmark nie wymaga podrozy
+			this->zmienPozycje(x, y);
+		}
+		// Rozpoznanie drogi prostej
+		if (this->zawiera('Ide', komenda))
+		{
+			// Dobor kierunku
+			if (this->zawiera('polnoc', komenda))
+			{
+				this->postawTutaj(new d1());
+				this->naPolnoc();
+			}
+			else if (this->zawiera('poludnie', komenda))
+			{
+				this->postawTutaj(new d1());
+				this->naPoludnie();
+			}
+			else if (this->zawiera('wschod', komenda))
+			{
+				this->postawTutaj(new d2());
+				this->naWschod();
+			}
+			else if (this->zawiera('zachod', komenda))
+			{
+				this->postawTutaj(new d2());
+				this->naZachod();
+			}
+		}
+		// Rozpoznanie zakretu
+		if (this->zawiera('Skrecam', komenda))
+		{
+			// Postaw odpowiedni zakret
+			if (this->zawiera('polnocy', komenda) && this->zawiera('wschodu', komenda))
+			{
+				if (this->zawiera('lagodnie', komenda))
+				{
+					this->postawTutaj(new z1());
+				}
+				else if (this->zawiera('ostro', komenda))
+				{
+					this->postawTutaj(new z11());
+				}
+
+			}
+			else if (this->zawiera('polnocy', komenda) && this->zawiera('zachodu', komenda))
+			{
+				if (this->zawiera('lagodnie', komenda))
+				{
+					this->postawTutaj(new z2());
+				}
+				else if (this->zawiera('ostro', komenda))
+				{
+					this->postawTutaj(new z21());
+				}
+			}
+			else if (this->zawiera('poludnia', komenda) && this->zawiera('wschodu', komenda))
+			{
+				if (this->zawiera('lagodnie', komenda))
+				{
+					this->postawTutaj(new z3());
+				}
+				else if (this->zawiera('ostro', komenda))
+				{
+					this->postawTutaj(new z31());
+				}
+			}
+			else if (this->zawiera('poludnia', komenda) && this->zawiera('zachodu', komenda))
+			{
+				if (this->zawiera('lagodnie', komenda))
+				{
+					this->postawTutaj(new z4());
+				}
+				else if (this->zawiera('ostro', komenda))
+				{
+					this->postawTutaj(new z41());
+				}
+			}
+			
+			// Rusz sie
+			if (this->zawiera('polnoc', komenda))
+			{
+				this->naPolnoc();
+			}
+			else if (this->zawiera('poludnie', komenda))
+			{
+				this->naPoludnie();
+			}
+			else if (this->zawiera('wschod', komenda))
+			{
+				this->naWschod();
+			}
+			else if (this->zawiera('zachod', komenda))
+			{
+				this->naZachod();
+			}
+		}
+		// Rozpoznanie skrzyzowania
+		if (this->zawiera('Na skrzyzowaniu', komenda))
+		{
+			// Postaw skrzyzowanie
+			this->postawTutaj(new cross());
+			
+			// Rusz sie
+			if (this->zawiera('polnoc', komenda))
+			{
+				this->naPolnoc();
+			}
+			else if (this->zawiera('poludnie', komenda))
+			{
+				this->naPoludnie();
+			}
+			else if (this->zawiera('wschod', komenda))
+			{
+				this->naWschod();
+			}
+			else if (this->zawiera('zachod', komenda))
+			{
+				this->naZachod();
+			}
+		}
+	}
+	
+protected:
+	bool zawiera(string fraza, string komenda)
+	{
+		// moze nie byc dobrze, nie umim
+		return komenda.find(fraza) != string::npos;
+	}
+	void postawTutaj(item elementTrasy)
+	{
+		this->siatka[this->x][this->y] = elementTrasy;
+	}
+	void zmienPozycje(int x, int y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+	void naPolnoc()
+	{
+		this->y = this->y + 1;
+	}
+	void naPoludnie()
+	{
+		this->y = this->y - 1;
+	}
+	void naWschod()
+	{
+		this->x = this->y + 1;
+	}
+	void naZachod()
+	{
+		this->y = this->y - 1;
+	}
+};
+
 const short SCREEN_W = 450, SCREEN_H = 450, MAP_SIDE = 450;
 int error_code = 0;
 
@@ -286,15 +529,22 @@ int main() {
          siatka[i][j] = NULL;
       }
    }
+	
+	string opisTrasy = FileHandler::read("../KCK/opisTrasy.txt");
+	BobBudowniczy budowniczy = new BobBudowniczy(siatka);
 
+	string komenda; // policji hehe
+    stringstream stream(opisTrasy);
+    
+    // Dla kazdej komendy
+    while(getline(stream, komenda, "\n"))
+    {
+        budowniczy->ogarnij(komenda);
+	}
+	
+	siatka = budowniczy->oddajMape();
 
-
-
-
-
-
-
-   //TUTAJ KOD
+   // WEZ KTOS SIATKE ZRENDERUJ BO nie umim
 
 
 
