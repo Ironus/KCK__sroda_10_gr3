@@ -234,249 +234,6 @@ public:
    }
 };
 
-class BobBudowniczy {
-public:
-	item* siatka;
-	int x, y;
-	
-	BobBudowniczy(item* siatka)
-	{
-		this->siatka = siatka;
-		this->zmienPozycje(8, 8);
-	}
-	
-	// Zwraca mape po zbudowaniu jej
-	item* oddajMape()
-	{
-		return this->siatka;
-	}
-	
-	// Ogarnia znaczenie komendy i wczytuje do mapy odpowiedni obiekt
-	void ogarnij(string komenda)
-	{
-		// Rozpoznanie landmarku
-		if (this->zawiera('Widze', komenda))
-		{
-			// Trzeba wiedziec gdzie wrocic...
-			int x, y;
-			x = this->x;
-			y = this->y;
-			
-			// Ruszamy sie w kierunku landmarku
-			if (this->zawiera('poludniu', komenda))
-			{
-				this->naPoludnie();
-				
-				if (this->zawiera('daleko', komenda))
-				{
-					this->naPoludnie();
-				}
-			}
-			else if (this->zawiera('polnocy', komenda))
-			{
-				this->naPolnoc();
-				
-				if (this->zawiera('daleko', komenda))
-				{
-					this->naPolnoc();
-				}
-			}
-			else if (this->zawiera('wschodzie', komenda))
-			{
-				this->naWschod();
-				
-				if (this->zawiera('daleko', komenda))
-				{
-					this->naWschod();
-				}
-			}
-			else if (this->zawiera('zachodzie', komenda))
-			{
-				this->naZachod();
-				
-				if (this->zawiera('daleko', komenda))
-				{
-					this->naZachod();
-				}
-			}
-			
-			// Dobór landmarku
-			if (this->zawiera('male drzewo', komenda))
-			{
-				this->postawTutaj(new mDrzewo());
-			} 
-			else if (this->zawiera('duze drzewo', komenda))
-			{
-				this->postawTutaj(new dDrzewo());
-			}
-			else if (this->zawiera('twardy kamien', komenda))
-			{
-				this->postawTutaj(new Kamien());
-			}
-			else if (this->zawiera('zielony krzak', komenda))
-			{
-				this->postawTutaj(new Krzak());
-			}
-			else if (this->zawiera('rodzinny dom', komenda))
-			{
-				this->postawTutaj(new Dom());
-			}
-			
-			// Powrot gdzie bylismy, landmark nie wymaga podrozy
-			this->zmienPozycje(x, y);
-		}
-		// Rozpoznanie drogi prostej
-		if (this->zawiera('Ide', komenda))
-		{
-			// Dobor kierunku
-			if (this->zawiera('polnoc', komenda))
-			{
-				this->postawTutaj(new d1());
-				this->naPolnoc();
-			}
-			else if (this->zawiera('poludnie', komenda))
-			{
-				this->postawTutaj(new d1());
-				this->naPoludnie();
-			}
-			else if (this->zawiera('wschod', komenda))
-			{
-				this->postawTutaj(new d2());
-				this->naWschod();
-			}
-			else if (this->zawiera('zachod', komenda))
-			{
-				this->postawTutaj(new d2());
-				this->naZachod();
-			}
-		}
-		// Rozpoznanie zakretu
-		if (this->zawiera('Skrecam', komenda))
-		{
-			// Postaw odpowiedni zakret
-			if (this->zawiera('polnocy', komenda) && this->zawiera('wschodu', komenda))
-			{
-				if (this->zawiera('lagodnie', komenda))
-				{
-					this->postawTutaj(new z1());
-				}
-				else if (this->zawiera('ostro', komenda))
-				{
-					this->postawTutaj(new z11());
-				}
-
-			}
-			else if (this->zawiera('polnocy', komenda) && this->zawiera('zachodu', komenda))
-			{
-				if (this->zawiera('lagodnie', komenda))
-				{
-					this->postawTutaj(new z2());
-				}
-				else if (this->zawiera('ostro', komenda))
-				{
-					this->postawTutaj(new z21());
-				}
-			}
-			else if (this->zawiera('poludnia', komenda) && this->zawiera('wschodu', komenda))
-			{
-				if (this->zawiera('lagodnie', komenda))
-				{
-					this->postawTutaj(new z3());
-				}
-				else if (this->zawiera('ostro', komenda))
-				{
-					this->postawTutaj(new z31());
-				}
-			}
-			else if (this->zawiera('poludnia', komenda) && this->zawiera('zachodu', komenda))
-			{
-				if (this->zawiera('lagodnie', komenda))
-				{
-					this->postawTutaj(new z4());
-				}
-				else if (this->zawiera('ostro', komenda))
-				{
-					this->postawTutaj(new z41());
-				}
-			}
-			
-			// Rusz sie
-			if (this->zawiera('polnoc', komenda))
-			{
-				this->naPolnoc();
-			}
-			else if (this->zawiera('poludnie', komenda))
-			{
-				this->naPoludnie();
-			}
-			else if (this->zawiera('wschod', komenda))
-			{
-				this->naWschod();
-			}
-			else if (this->zawiera('zachod', komenda))
-			{
-				this->naZachod();
-			}
-		}
-		// Rozpoznanie skrzyzowania
-		if (this->zawiera('Na skrzyzowaniu', komenda))
-		{
-			// Postaw skrzyzowanie
-			this->postawTutaj(new cross());
-			
-			// Rusz sie
-			if (this->zawiera('polnoc', komenda))
-			{
-				this->naPolnoc();
-			}
-			else if (this->zawiera('poludnie', komenda))
-			{
-				this->naPoludnie();
-			}
-			else if (this->zawiera('wschod', komenda))
-			{
-				this->naWschod();
-			}
-			else if (this->zawiera('zachod', komenda))
-			{
-				this->naZachod();
-			}
-		}
-	}
-	
-protected:
-	bool zawiera(string fraza, string komenda)
-	{
-		// moze nie byc dobrze, nie umim
-		return komenda.find(fraza) != string::npos;
-	}
-	void postawTutaj(item elementTrasy)
-	{
-		this->siatka[this->x][this->y] = elementTrasy;
-	}
-	void zmienPozycje(int x, int y)
-	{
-		this->x = x;
-		this->y = y;
-	}
-	void naPolnoc()
-	{
-		this->y = this->y + 1;
-	}
-	void naPoludnie()
-	{
-		this->y = this->y - 1;
-	}
-	void naWschod()
-	{
-		this->x = this->y + 1;
-	}
-	void naZachod()
-	{
-		this->y = this->y - 1;
-	}
-};
-
 const short SCREEN_W = 450, SCREEN_H = 450, MAP_SIDE = 450;
 int error_code = 0;
 
@@ -495,7 +252,7 @@ int graphic_initialize() {
       al_show_native_message_box(NULL, NULL, "ERROR display", "B³¹d tworzenia okna display.", NULL, NULL);
       return -2;
    }
-   
+
    al_init_image_addon();
    al_init_font_addon();
    al_init_ttf_addon();
@@ -520,36 +277,270 @@ bool graphic_destroy() {
 int main() {
    graphic_initialize();
    al_clear_to_color(al_map_rgb(255, 0, 255));
-   
+
    int y = 8, x = 8, i = 0;
-   item* siatka[15][15];
+   vector<vector<item*> > siatka;
+   siatka.resize(15);
+   for (int i = 0; i < 15; i++) {
+      siatka[i].resize(15);
+   }
 
    for (int i = 0; i < 15; i++) {
       for (int j = 0; j < 15; j++) {
          siatka[i][j] = NULL;
       }
    }
-	
-	string opisTrasy = FileHandler::read("../KCK/opisTrasy.txt");
-	BobBudowniczy budowniczy = new BobBudowniczy(siatka);
 
-	string komenda; // policji hehe
-    stringstream stream(opisTrasy);
-    
-    // Dla kazdej komendy
-    while(getline(stream, komenda, "\n"))
-    {
-        budowniczy->ogarnij(komenda);
-	}
-	
-	siatka = budowniczy->oddajMape();
+   //string opisTrasy = FileHandler::read("../KCK/opisTrasy.txt");
 
-   // WEZ KTOS SIATKE ZRENDERUJ BO nie umim
+   string komenda;
+   ifstream input("../KCK/opisTrasy.txt");
 
-
-
-
-
+   x = 8;
+   y = 8;
+   // Dla kazdej komendy
+   getline(input, komenda);
+   do {
+      cout << komenda << endl;
+      if (komenda.find("Na skrzyzowaniu") != std::string::npos) {
+         siatka[x][y] = new cross();
+         if (komenda.find("na wschod") != std::string::npos) {
+            if (x + 1 < 15)
+               x++;
+         }
+         else if (komenda.find("na zachod") != std::string::npos) {
+            if (x - 1 >= 0)
+               x--;
+         }
+         else if (komenda.find("na polnoc") != std::string::npos) {
+            if (y - 1 >= 0)
+               y--;
+         }
+         else {
+            if (x + 1 >= 0)
+               y++;
+         }
+      }
+      else if (komenda.find("Ide na") != std::string::npos) {
+         if (komenda.find("wschod") != std::string::npos) {
+            siatka[x][y] = new d2();
+            if (x + 1 < 15)
+               x++;
+         }
+         else if (komenda.find("zachod") != std::string::npos) {
+            siatka[x][y] = new d2();
+            if (x - 1 >= 0)
+               x--;
+         }
+         else if (komenda.find("polnoc") != std::string::npos) {
+            siatka[x][y] = new d1();
+            if (y - 1 >= 0)
+               y--;
+         }
+         else {
+            siatka[x][y] = new d1();
+            if (y + 1 < 15)
+               y++;
+         }
+      }
+      else if (komenda.find("Skrecam") != std::string::npos) {
+         if (komenda.find("lagodnie") != std::string::npos) {
+            if (komenda.find("z polnocy na zachod") != std::string::npos) {
+               siatka[x][y] = new z1();
+               if (x - 1 >= 0)
+                  x--;
+            }
+            else if (komenda.find("z zachodu na polnoc") != std::string::npos) {
+               siatka[x][y] = new z1();
+               if (y - 1 >= 0)
+                  y--;
+            }
+            else if (komenda.find("z polnocy na wschod") != std::string::npos) {
+               siatka[x][y] = new z2();
+               if (x + 1 < 15)
+                  x++;
+            }
+            else if (komenda.find("z wschodu na polnoc") != std::string::npos) {
+               siatka[x][y] = new z2();
+               if (y - 1 >= 0)
+                  y--;
+            }
+            else if (komenda.find("z poludnia na zachod") != std::string::npos) {
+               siatka[x][y] = new z3();
+               if (x - 1 >= 0)
+                  x--;
+            }
+            else if (komenda.find("z zachodu na poludnie") != std::string::npos) {
+               siatka[x][y] = new z3();
+               if (y + 1 < 15)
+                  y++;
+            }
+            else if (komenda.find("z poludnia na wschod") != std::string::npos) {
+               siatka[x][y] = new z4();
+               if (x + 1 < 15)
+                  x++;
+            }
+            else {
+               siatka[x][y] = new z4();
+               if (y + 1 < 15)
+                  y++;
+            }
+         }
+         else {
+            if (komenda.find("z polnocy na zachod") != std::string::npos) {
+               siatka[x][y] = new z11();
+               if (x - 1 >= 0)
+                  x--;
+            }
+            else if (komenda.find("z zachodu na polnoc") != std::string::npos) {
+               siatka[x][y] = new z11();
+               if (y - 1 >= 0)
+                  y--;
+            }
+            else if (komenda.find("z polnocy na wschod") != std::string::npos) {
+               siatka[x][y] = new z21();
+               if (x + 1 < 15)
+                  x++;
+            }
+            else if (komenda.find("z wschodu na polnoc") != std::string::npos) {
+               siatka[x][y] = new z21();
+               if (y - 1 >= 0)
+                  y--;
+            }
+            else if (komenda.find("z poludnia na zachod") != std::string::npos) {
+               siatka[x][y] = new z31();
+               if (x - 1 >= 0)
+                  x--;
+            }
+            else if (komenda.find("z zachodu na poludnie") != std::string::npos) {
+               siatka[x][y] = new z31();
+               if (y + 1 < 15)
+                  y++;
+            }
+            else if (komenda.find("z poludnia na wschod") != std::string::npos) {
+               siatka[x][y] = new z41();
+               if (x + 1 < 15)
+                  x++;
+            }
+            else {
+               siatka[x][y] = new z41();
+               if (y + 1 < 15)
+                  y++;
+            }
+         }
+      }
+      else if (komenda.find("Widze") != std::string::npos) {
+         if (komenda.find("blisko") != std::string::npos) {
+            if (komenda.find("drzewo") != std::string::npos) {
+               if (komenda.find("male") != std::string::npos) {
+                  if (komenda.find("polnocy") != std::string::npos)
+                     siatka[x][y - 1] = new mDrzewo();
+                  else if (komenda.find("poludniu") != std::string::npos)
+                     siatka[x][y + 1] = new mDrzewo();
+                  else if (komenda.find("wschodzie") != std::string::npos)
+                     siatka[x + 1][y] = new mDrzewo();
+                  else
+                     siatka[x - 1][y] = new mDrzewo();
+               }
+               else {
+                  if (komenda.find("polnocy") != std::string::npos)
+                     siatka[x][y - 1] = new dDrzewo();
+                  else if (komenda.find("poludniu") != std::string::npos)
+                     siatka[x][y + 1] = new dDrzewo();
+                  else if (komenda.find("wschodzie") != std::string::npos)
+                     siatka[x + 1][y] = new dDrzewo();
+                  else
+                     siatka[x - 1][y] = new dDrzewo();
+               }
+            }
+            else if (komenda.find("kamien") != std::string::npos) {
+               if (komenda.find("polnocy") != std::string::npos)
+                  siatka[x][y - 1] = new Kamien();
+               else if (komenda.find("poludniu") != std::string::npos)
+                  siatka[x][y + 1] = new Kamien();
+               else if (komenda.find("wschodzie") != std::string::npos)
+                  siatka[x + 1][y] = new Kamien();
+               else
+                  siatka[x - 1][y] = new Kamien();
+            }
+            else if (komenda.find("krzak") != std::string::npos) {
+               if (komenda.find("polnocy") != std::string::npos)
+                  siatka[x][y - 1] = new Krzak();
+               else if (komenda.find("poludniu") != std::string::npos)
+                  siatka[x][y + 1] = new Krzak();
+               else if (komenda.find("wschodzie") != std::string::npos)
+                  siatka[x + 1][y] = new Krzak();
+               else
+                  siatka[x - 1][y] = new Krzak();
+            }
+            else {
+               if (komenda.find("polnocy") != std::string::npos)
+                  siatka[x][y - 1] = new Dom();
+               else if (komenda.find("poludniu") != std::string::npos)
+                  siatka[x][y + 1] = new Dom();
+               else if (komenda.find("wschodzie") != std::string::npos)
+                  siatka[x + 1][y] = new Dom();
+               else
+                  siatka[x - 1][y] = new Dom();
+            }
+         }
+         else {
+            if (komenda.find("drzewo") != std::string::npos) {
+               if (komenda.find("male") != std::string::npos) {
+                  if (komenda.find("polnocy") != std::string::npos)
+                     siatka[x][y - 2] = new mDrzewo();
+                  else if (komenda.find("poludniu") != std::string::npos)
+                     siatka[x][y + 2] = new mDrzewo();
+                  else if (komenda.find("wschodzie") != std::string::npos)
+                     siatka[x + 2][y] = new mDrzewo();
+                  else
+                     siatka[x - 2][y] = new mDrzewo();
+               }
+               else {
+                  if (komenda.find("polnocy") != std::string::npos)
+                     siatka[x][y - 2] = new dDrzewo();
+                  else if (komenda.find("poludniu") != std::string::npos)
+                     siatka[x][y + 2] = new dDrzewo();
+                  else if (komenda.find("wschodzie") != std::string::npos)
+                     siatka[x + 2][y] = new dDrzewo();
+                  else
+                     siatka[x - 2][y] = new dDrzewo();
+               }
+            }
+            else if (komenda.find("kamien") != std::string::npos) {
+               if (komenda.find("polnocy") != std::string::npos)
+                  siatka[x][y - 2] = new Kamien();
+               else if (komenda.find("poludniu") != std::string::npos)
+                  siatka[x][y + 2] = new Kamien();
+               else if (komenda.find("wschodzie") != std::string::npos)
+                  siatka[x + 2][y] = new Kamien();
+               else
+                  siatka[x - 2][y] = new Kamien();
+            }
+            else if (komenda.find("krzak") != std::string::npos) {
+               if (komenda.find("polnocy") != std::string::npos)
+                  siatka[x][y - 2] = new Krzak();
+               else if (komenda.find("poludniu") != std::string::npos)
+                  siatka[x][y + 2] = new Krzak();
+               else if (komenda.find("wschodzie") != std::string::npos)
+                  siatka[x + 2][y] = new Krzak();
+               else
+                  siatka[x - 2][y] = new Krzak();
+            }
+            else {
+               if (komenda.find("polnocy") != std::string::npos)
+                  siatka[x][y - 2] = new Dom();
+               else if (komenda.find("poludniu") != std::string::npos)
+                  siatka[x][y + 2] = new Dom();
+               else if (komenda.find("wschodzie") != std::string::npos)
+                  siatka[x + 2][y] = new Dom();
+               else
+                  siatka[x - 2][y] = new Dom();
+            }
+         }
+      }
+      getline(input, komenda);
+   } while (komenda != "STOP");
 
    bool done = false;
    ALLEGRO_BITMAP * grassBitmap = NULL;
@@ -558,8 +549,8 @@ int main() {
       ALLEGRO_EVENT ev;
       for (int l = 0; l < 15; l++) {
          for (int m = 0; m < 15; m++) {
-            if (siatka[m][l] != NULL)
-               al_draw_bitmap(siatka[m][l]->getBitmap(), l * 30, m * 30, NULL);
+            if (siatka[l][m] != NULL)
+               al_draw_bitmap(siatka[l][m]->getBitmap(), l * 30, m * 30, NULL);
             else
                al_draw_bitmap(grassBitmap, l * 30, m * 30, NULL);
          }
